@@ -12,15 +12,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Blank page
-                <small>it all starts here</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Examples</a></li>
-                <li class="active">Blank page</li>
-            </ol>
+
         </section>
 
         <!-- Main content -->
@@ -45,15 +37,16 @@
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-bordered table-striped" data-toggle="dataTable"
+                                   data-form="deleteForm">
                                 <thead>
                                 <tr>
                                     <th>S.No</th>
-                                    <th>Company Name</th>
+                                    <th>Visit Purpose</th>
                                     <th>Will Meet</th>
                                     <th>Visitors</th>
-                                    <th>Type</th>
                                     <th>Status</th>
+                                    <th>Date</th>
                                     <th>Time</th>
                                     <th>End Time</th>
                                     @can('visits.update',Auth::user())
@@ -68,7 +61,15 @@
                                 @foreach ($visits as $visit)
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
-                                        <td>{{ $visit->name }}</td>
+                                        @if($visit->purposetext)
+                                            <td>
+                                                {{ $visit->purposetext }}
+                                            </td>
+                                            @else
+                                            <td>
+                                                {{ $visit->purpose }}
+                                            </td>
+                                        @endif
                                         <td> @foreach ($visit->companies as $company)
                                                 {{ $company->name }}
                                             @endforeach
@@ -77,8 +78,8 @@
                                                 {{ $visitor->name }}
                                             @endforeach
                                         </td>
-                                        <td>{{ $visit->type }}</td>
                                         <td>{{ $visit->status}}</td>
+                                        <td>{{ $visit->date}}</td>
                                         <td>{{ $visit->time}}</td>
                                         <td>{{ $visit->endtime}}</td>
                                         @can('visits.update',Auth::user())
@@ -87,20 +88,8 @@
                                         @endcan
                                         @can('visits.delete',Auth::user())
                                             <td>
-                                                <form id="delete-form-{{ $visit->id }}" method="post"
-                                                      action="{{ route('visit.destroy',$visit->id) }}"
-                                                      style="display: none">
-                                                    {{ csrf_field() }}
-                                                    {{ method_field('DELETE') }}
-                                                </form>
-                                                <a href="" onclick="
-                                                        if(confirm('Are you sure, You want to delete this?')){
-                                                        event.preventDefault();
-                                                        document.getElementById('delete-form-{{ $visit->id }}').submit();
-                                                        }
-                                                        else{
-                                                        event.preventDefault();
-                                                        }"><span class="glyphicon glyphicon-trash"></span></a>
+                                                <a href="" data-visitid={{$visit->id}} data-toggle="modal" data-target="#delete"><span
+                                                            class="glyphicon glyphicon-trash"></span></a>
                                             </td>
                                         @endcan
                                     </tr>
@@ -124,6 +113,33 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+    <!-- Modal -->
+    <div class="modal modal-danger fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
+                </div>
+                <form action="{{route('visit.destroy','test')}}" method="post">
+                    {{method_field('delete')}}
+                    {{csrf_field()}}
+                    <div class="modal-body">
+                        <p class="text-center">
+                            Are you sure you want to delete this?
+                        </p>
+                        <input type="hidden" name="visit_id" id="visit_id" value="">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
+                        <button type="submit" class="btn btn-warning">Yes, Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
 
 @endsection
@@ -136,5 +152,15 @@
             $("#example1").DataTable();
         });
     </script>
+
+    <script>
+        $('#delete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var visit_id = button.data('visitid')
+            var modal = $(this)
+            modal.find('.modal-body #visit_id').val(visit_id);
+        })
+    </script>
+
 
 @endsection

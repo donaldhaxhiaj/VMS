@@ -12,15 +12,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Text Editors
-                <small>Advanced form element</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Forms</a></li>
-                <li class="active">Editors</li>
-            </ol>
+
         </section>
 
         <!-- Main content -->
@@ -32,7 +24,6 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Titles</h3>
                         </div>
-                    @include('includes.messages')
                     <!-- /.box-header -->
                         <!-- form start -->
                         <form role="form" action="{{ route('visitor.update',$visitor->id) }}" method="post" enctype="multipart/form-data">
@@ -40,25 +31,46 @@
                             {{ method_field('PATCH') }}
                             <div class="box-body">
                                 <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="title">Visitor Name</label>
+                                    <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+                                        <label for="name">Visitor Name</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ $visitor->name }}">
+                                        @if ($errors->has('name'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
-                                    <div class="form-group">
-                                        <label for="subtitle">Visitor Surname</label>
+                                    <div class="form-group {{ $errors->has('surname') ? ' has-error' : '' }}">
+                                        <label for="surname">Visitor Surname</label>
                                         <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname" value="{{ $visitor->surname }}">
+                                        @if ($errors->has('surname'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('idnr') ? ' has-error' : '' }}">
                                         <label for="idnr">Visitor ID.nr</label>
                                         <input type="text" class="form-control" id="idnr" name="idnr" placeholder="Id.nr" value="{{ $visitor->idnr }}">
+                                        @if ($errors->has('idnr'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('idnr') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
-                                    <div class="form-group">
-                                        <label for="company">Company Name</label>
-                                        <input type="text" class="form-control" id="company" name="company" placeholder="Company Name" value="{{ $visitor->company }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="birthdate">Visitor Birth Date</label>
-                                        <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="Birth Date" value="{{ $visitor->birthdate }}">
+                                    <div class="bootstrap-iso">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="">
+                                                    <!-- Form code begins -->
+                                                    <div class="form-group"> <!-- Date input -->
+                                                        <label class="control-label" for="date">Birth Date</label>
+                                                        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" value="{{ $visitor->date }}" type="text"/>
+                                                    </div>
+                                                    <!-- Form code ends -->
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="gender">Gender</label>
@@ -113,15 +125,17 @@
 
 @section('footerSection')
     <script src="{{ asset('admin/plugins/select2/select2.full.min.js') }}"></script>
-    <script src="{{ asset('admin/ckeditor/ckeditor.js') }}"></script>
     <script>
-        $(function () {
-            // Replace the <textarea id="editor1"> with a CKEditor
-            // instance, using default configuration.
-            CKEDITOR.replace('editor1');
-            //bootstrap WYSIHTML5 - text editor
-            $(".textarea").wysihtml5();
-        });
+        $(document).ready(function(){
+            var date_input=$('input[name="date"]'); //our date input has the name "date"
+            var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+            date_input.datepicker({
+                format: 'mm/dd/yyyy',
+                container: container,
+                todayHighlight: true,
+                autoclose: true,
+            })
+        })
     </script>
     <script>
         $(document).ready(function () {

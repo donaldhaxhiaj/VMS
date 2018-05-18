@@ -12,15 +12,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Blank page
-                <small>it all starts here</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Examples</a></li>
-                <li class="active">Blank page</li>
-            </ol>
+
         </section>
 
         <!-- Main content -->
@@ -51,7 +43,7 @@
                                     <th>S.No</th>
                                     <th>Name</th>
                                     <th>Surname</th>
-                                    <th>Other Info</th>
+                                    <th>More Info</th>
                                     @can('users.update',Auth::user())
                                     <th>Edit</th>
                                     @endcan
@@ -71,7 +63,7 @@
                                             <dl>
                                             <dt>Gender:</dt><dd>{{ $visitor->gender }}</dd>
                                             <dt>Idnumber:</dt><dd>{{ $visitor->idnr }}</dd>
-                                            <dt>Birthdate:</dt><dd>{{ $visitor->birthdate }}</dd>
+                                            <dt>Birthdate:</dt><dd>{{ $visitor->date }}</dd>
                                             <dt>State:</dt><dd>{{ $visitor->state }}</dd>
                                             <dt>Email:</dt><dd>{{ $visitor->email }}</dd>
                                             <dt>Phone:</dt><dd>{{ $visitor->phone }}</dd>
@@ -82,21 +74,12 @@
                                         </td>
                                         @can('users.update',Auth::user())
                                             <td><a href="{{ route('visitor.edit',$visitor->id) }}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                                        @endcan
                                         <td>
-                                            @endcan
                                             @can('users.delete',Auth::user())
-                                            <form id="delete-form-{{ $visitor->id }}" method="post" action="{{ route('visitor.destroy',$visitor->id) }}" style="display: none">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-                                            </form>
-                                            <a href=""onclick="
-                                                    if(confirm('Are you sure, You want to delete this?')){
-                                                        event.preventDefault();
-                                                        document.getElementById('delete-form-{{ $visitor->id }}').submit();
-                                                    }
-                                                    else{
-                                                        event.preventDefault();
-                                                    }"><span class="glyphicon glyphicon-trash"></span></a>
+                                                <a href="" data-visitid={{$visitor->id}} data-toggle="modal" data-target="#delete"><span
+                                                            class="glyphicon glyphicon-trash"></span></a>
+
                                         </td>
                                             @endcan
 
@@ -122,6 +105,32 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+    <!-- Modal -->
+    <div class="modal modal-danger fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
+                </div>
+                <form action="{{route('visitor.destroy','test')}}" method="post">
+                    {{method_field('delete')}}
+                    {{csrf_field()}}
+                    <div class="modal-body">
+                        <p class="text-center">
+                            Are you sure you want to delete this?
+                        </p>
+                        <input type="hidden" name="visit_id" id="visit_id" value="">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
+                        <button type="submit" class="btn btn-warning">Yes, Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 @endsection
@@ -134,6 +143,14 @@
             $("#example1").DataTable();
             $('[data-toggle="popover"]').popover({ html: true });
         });
+    </script>
+    <script>
+        $('#delete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var visit_id = button.data('visitid')
+            var modal = $(this)
+            modal.find('.modal-body #visit_id').val(visit_id);
+        })
     </script>
 
 @endsection

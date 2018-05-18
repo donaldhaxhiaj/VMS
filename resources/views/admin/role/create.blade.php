@@ -5,15 +5,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Text Editors
-                <small>Advanced form element</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Forms</a></li>
-                <li class="active">Editors</li>
-            </ol>
+
         </section>
 
         <!-- Main content -->
@@ -73,7 +65,7 @@
                                         @endforeach
                                     </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="form-group">
                                         <label for="name">Visit Permissions</label>
                                         @foreach ($permissions as $permission)
                                             @if ($permission->for == 'visit')
@@ -83,15 +75,12 @@
                                             @endif
                                         @endforeach
                                     </div>
-                                </div>
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                         <a href="{{ route('role.index') }}" class="btn btn-warning">Back</a>
                                     </div>
 
-
-                                </div>
                                 </div>
                         </form>
                     </div>

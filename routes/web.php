@@ -32,17 +32,16 @@ Route::group(['namespace' => 'Admin'],function() {
     // Company Routes
     Route::resource('admin/company','CompanyController');
 
+    Route::post('visit/ajax-create', 'VisitorController@ajaxStore')->name('visitor.ajaxStore');
+
     //Admin Auth Routes
     Route::get('admin-login', 'Auth\LoginController@showLoginForm')->name('admin.login');
     Route::post('admin-login', 'Auth\LoginController@login');
     Route::get('admin-logout', 'Auth\LoginController@logout')->name('logout');
-
-
 });
-
-
 
 
 Auth::routes();
 
-Route::get('admin/home', 'HomeController@index')->name('admin.home');
+Route::get('/home', 'HomeController@index')->name('home');
+

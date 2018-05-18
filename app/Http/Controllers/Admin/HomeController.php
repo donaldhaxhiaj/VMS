@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Model\user\visitor;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
@@ -17,21 +18,11 @@ class HomeController extends Controller
         $this->middleware('auth:admin');
     }
 
-    public function company()
-    {
-        $companies = DB::table("companies")->lists("name","id");
-        return view('myform',compact('companies'));
-    }
-
-
-    /**
-     * Get Ajax Request and restun Data
-     *
-     * @return \Illuminate\Http\Response
-     */
-
 
     public function index() {
-        return view('admin/home');
+        $visitors = visitor::all();
+        visitor::count();
+        return view('admin.home',compact('visitors'));
+
     }
 }

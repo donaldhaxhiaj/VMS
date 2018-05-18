@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Model\User;
+namespace App\Model\user;
 
 
 use Illuminate\Database\Eloquent\Model;
 
 class visitor extends Model
 {
-    public function visitors()
+    public function visits()
     {
         return $this->belongsToMany('App\Model\user\visit','visit_visitors')->withTimestamps();
     }
+
+
 
 }

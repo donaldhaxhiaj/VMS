@@ -7,6 +7,7 @@ use App\Model\user\visit;
 use App\Http\Controllers\Controller;
 use App\Model\user\company;
 use App\Model\user\visitor;
+use App\Model\user\visit_visitors;
 
 class VisitController extends Controller
 {
@@ -27,6 +28,7 @@ class VisitController extends Controller
     public function index()
     {
         $visits = visit::all();
+
         return view('admin.visit.show',compact('visits'));
     }
     /**
@@ -39,7 +41,6 @@ class VisitController extends Controller
         $visitors = visitor::all();
         $companies =company::all();
         return view('admin.visit.visit',compact('companies','visitors'));
-
     }
 
     /**
@@ -51,17 +52,17 @@ class VisitController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'name' => 'required',
+
+
 
         ]);
         $visit = new visit;
-        $visit->name = $request->name;
-        $visit->type = $request->type;
         $visit->group = $request->group;
         $visit->purpose = $request->purpose;
-        $visit->other = $request->other;
+        $visit->purposetext = $request->purposetext;
         $visit->plan = $request->plan;
         $visit->status = $request->status;
+        $visit->date = $request->date;
         $visit->time = $request->time;
         $visit->endtime = $request->endtime;
         $visit->comments = $request->comments;
@@ -69,8 +70,11 @@ class VisitController extends Controller
              $visit->status = "Ongoing";
          }
         $visit->save();
-        $visit->companies()->sync($request->companies);
+
+       // $visit->visitVisitors()->sync($request->visitVisitors);
+        //$visit->companies()->sync($request->visitCompanies);
         $visit->visitors()->sync($request->visitors);
+        $visit->companies()->sync($request->companies);
 
         return redirect(route('visit.index'))->with('message','Visit Created Successfully');
     }
@@ -110,17 +114,15 @@ class VisitController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'name' => 'required',
+
 
         ]);
         $visit = visit::find($id);
-        $visit->name = $request->name;
-        $visit->type = $request->type;
         $visit->group = $request->group;
         $visit->purpose = $request->purpose;
-        $visit->other = $request->other;
         $visit->plan = $request->plan;
         $visit->status = $request->status;
+        $visit->date = $request->date;
         $visit->time = $request->time;
         $visit->endtime = $request->endtime;
         $visit->comments = $request->comments;
@@ -137,9 +139,10 @@ class VisitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        visit::where('id',$id)->delete();
-        return redirect()->back()->with('message','Visit Deleted Successfully');
+        $visit = Visit::findOrFail($request->visit_id);
+        $visit->delete();
+        return back();
     }
 }

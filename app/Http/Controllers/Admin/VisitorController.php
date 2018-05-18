@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Model\user\visitor;
 use App\Http\Controllers\Controller;
-use App\Model\user\category;
-use App\Model\user\tag;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -56,15 +55,14 @@ class VisitorController extends Controller
         $this->validate($request,[
           'name'=>'required',
           'surname'=>'required',
-          'idnr'=>'required',
-          'company'=>'required'
+          'idnr'=>'required|unique:visitors'
         ]);
 
         $visitor = new visitor;
         $visitor->name = $request->name;
         $visitor->surname = $request->surname;
         $visitor->idnr = $request->idnr;
-        $visitor->birthdate = $request->birthdate;
+        $visitor->date = $request->date;
         $visitor->state = $request->state;
         $visitor->gender = $request->gender;
         $visitor->email = $request->email;
@@ -75,6 +73,39 @@ class VisitorController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function ajaxStore(Request $request)
+    {
+        $this->validate($request,[
+            'name'=>'required',
+            'surname'=>'required',
+            'idnr'=>'required|unique:visitors'
+        ]);
+
+        $visitor = new visitor;
+        $visitor->name = $request->name;
+        $visitor->surname = $request->surname;
+        $visitor->idnr = $request->idnr;
+        $visitor->date = $request->date;
+        $visitor->state = $request->state;
+        $visitor->gender = $request->gender;
+        $visitor->email = $request->email;
+        $visitor->phone = $request->phone;
+        $visitor->comments = $request->comments;
+        $visitor->save();
+
+        $response = Response::create($visitor, 200);
+
+        $response->header('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -82,7 +113,7 @@ class VisitorController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -113,14 +144,15 @@ class VisitorController extends Controller
     {
         $this->validate($request,[
             'name'=>'required',
-            'surname' => 'required',
+            'surname'=>'required',
+            'idnr'=>'required'
         ]);
 
         $visitor = visitor::find($id);
         $visitor->name = $request->name;
         $visitor->surname = $request->surname;
         $visitor->idnr = $request->idnr;
-        $visitor->birthdate = $request->birthdate;
+        $visitor->date = $request->date;
         $visitor->state = $request->state;
         $visitor->gender = $request->gender;
         $visitor->email = $request->email;
@@ -137,9 +169,11 @@ class VisitorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        visitor::where('id',$id)->delete();
-        return redirect()->back()->with('message','Visitor Deleted Successfully');
+        $visitor = Visitor::findOrFail($request->visit_id);
+        $visitor->delete();
+        return back() ->with('message','Visitor Deleted Successfully');
+
     }
 }

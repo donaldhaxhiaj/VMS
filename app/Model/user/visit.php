@@ -8,11 +8,11 @@ class visit extends Model
 {
     public function companies()
     {
-        return $this->belongsToMany('App\Model\user\company','visit_companies')->withTimestamps();
+        return $this->belongsToMany('App\Model\user\company','visit_visitors');
     }
     public function visitors()
     {
-        return $this->belongsToMany('App\Model\user\visitor','visit_visitors')->withTimestamps();
+        return $this->belongsToMany('App\Model\user\visitor','visit_visitors');
     }
     public function getRouteKeyName()
     {
