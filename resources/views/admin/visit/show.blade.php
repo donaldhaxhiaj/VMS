@@ -49,6 +49,7 @@
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>End Time</th>
+                                    <th>Visitor Exit</th>
                                     @can('visits.update',Auth::user())
                                         <th>Edit</th>
                                     @endcan
@@ -82,6 +83,10 @@
                                         <td>{{ $visit->date}}</td>
                                         <td>{{ $visit->time}}</td>
                                         <td>{{ $visit->endtime}}</td>
+                                        <td>
+                                            <a href="#" data-toggle="popover" data-placement="left" title="Visitor Info" data-content="{{ $visit->visitors }}">
+                                                <span class="glyphicon glyphicon-info-sign"></span></a>
+                                        </td>
                                         @can('visits.update',Auth::user())
                                             <td><a href="{{ route('visit.edit',$visit->id) }}"><span
                                                             class="glyphicon glyphicon-edit"></span></a></td>
@@ -114,7 +119,7 @@
     </div>
     <!-- /.content-wrapper -->
     <!-- Modal -->
-    <div class="modal modal-danger fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -132,8 +137,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
-                        <button type="submit" class="btn btn-warning">Yes, Delete</button>
+                        <button type="button" class="btn btn-info" data-dismiss="modal">No, Cancel</button>
+                        <button type="submit" class="btn btn-adn">Yes, Delete</button>
                     </div>
                 </form>
             </div>
@@ -152,6 +157,13 @@
             $("#example1").DataTable();
         });
     </script>
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+            $('[data-toggle="popover"]').popover({ html: true });
+
+        });
+    </script>
 
     <script>
         $('#delete').on('show.bs.modal', function (event) {
@@ -161,6 +173,7 @@
             modal.find('.modal-body #visit_id').val(visit_id);
         })
     </script>
+
 
 
 @endsection

@@ -69,6 +69,9 @@ class VisitController extends Controller
         if (isset($request->startVisit) && $request->startVisit == "start-visit") {
              $visit->status = "Ongoing";
          }
+        if (isset($request->startVisit) && $request->startVisit == "start-visit") {
+            $visit->time = now();
+        }
         $visit->save();
 
        // $visit->visitVisitors()->sync($request->visitVisitors);

@@ -3,7 +3,13 @@
 @section('headSection')
 
     <link rel="stylesheet" href="{{ asset('admin/plugins/select2/select2.min.css') }}">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
+    <style>
+        .toggle.btn {
+            min-width: 110px !important;
+        }
+    </style>
 @endsection
 
 @section('main-content')
@@ -50,34 +56,9 @@
                                                    placeholder="Purpose">
                                         </div>
                                     </div>
-                                    <table class="table no-margin text-center">
-                                        <thead>
-                                        <tr>
-                                            <th>Visitor ID</th>
-                                            <th>Visitor Name</th>
-                                            <th>Comming from</th>
-                                            <th>Will meet</th>
-                                            <th></th>
-                                        </tr>
 
-                                        </thead>
-                                        <tbody id="addVisitors">
 
-                                        </tbody>
-                                        {{--<input type="hidden" name="visitVisitors[]" value="4,1"/>--}}
-                                    </table>
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target-id="1" data-target="#myModal" style="float:right;">Add
-                                            Visitors
-                                        </button>
-                                    </div>
-                                    <button type="button"
-                                            class="btn btn-success btn-xs load-ajax-modal"
-                                            role="button"
-                                            data-toggle="modal" data-target="#dynamic-modal">
-                                        <span class="glyphicon glyphicon-plus-sign"></span> Add
-                                    </button>
+
 
                                     <div class="form-group">
                                         <label for="plan">Visit Plan</label>
@@ -123,11 +104,38 @@
                                         <textarea name="comments" id="comments" class="xlarge form-control"
                                                   style="margin: 0px 332.656px 0px 0px;"></textarea>
                                     </div>
+                                    <div class="jumbotron">
+                                        <div class="form-group">
+                                            <button type="button"
+                                                    class="btn btn-success load-ajax-modal"
+                                                    role="button"
+                                                    data-toggle="modal" data-target="#dynamic-modal">
+                                                <span class="glyphicon glyphicon-plus-sign"></span> Add Visitor
+                                            </button>
+                                        </div>
 
+
+                                        <table class="table no-margin text-center">
+                                            <thead>
+                                            <tr>
+                                                <th>Visitor ID</th>
+                                                <th>Visitor Name</th>
+                                                <th>Comming from</th>
+                                                <th>Will meet</th>
+                                                <th></th>
+                                            </tr>
+
+                                            </thead>
+                                            <tbody id="addVisitors">
+
+                                            </tbody>
+                                            {{--<input type="hidden" name="visitVisitors[]" value="4,1"/>--}}
+                                        </table>
+                                    </div>
                                 </div>
 
                             </div>
-                    </div>
+
 
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -161,34 +169,10 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="form-group" style="margin-top:18px;">
-                        <label>Select Visitors</label>
-                        <select class="form-control select2 select2-hidden-accessible" id="selectVisitor"
-                                data-placeholder="Select a Visitor" style="width: 100%;" tabindex="-1"
-                                aria-hidden="true" name="visitor">
-                            <option></option>
-                            @foreach ($visitors as $visitor)
-                                <option value="{{ $visitor->id }}">{{ $visitor->name }} {{ $visitor->surname }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="commingfrom">Coming from</label>
-                        <input name="commingfrom" type="text" id="commingfrom" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                        <label>Will Meet</label>
-                        <select name="companies" id="companies" class="form-control">
-                            <option value=""> Select</option>
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveVisitor">Save changes</button>
                 </div>
 
             </div>
@@ -202,100 +186,144 @@
                 <div class="modal-body">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Visitors</h3>
+                            <h3 class="box-title">Shto Vizitoret</h3>
                         </div>
                         <!-- /.box-header -->
                         <p id="errorMsg" class="alert alert-danger" style="display: none;"></p>
                         <!-- form start -->
-                        <form role="form" action="{{ route('visitor.ajaxStore') }}" method="post"
-                              enctype="multipart/form-data">
-                            {{ csrf_field() }}
+
                             <div class="box-body">
-                                <div class="col-lg-6">
-                                    <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
-                                        <label for="name">Visitor Name<sup>*</sup></label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name"
-                                               value="{{ old('name') }}">
-                                        @if ($errors->has('name'))
-                                            <span class="help-block">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#search">Zgjidh</a></li>
+                                    <li><a data-toggle="tab" href="#create_new">Krijo te ri</a></li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div id="search" class="tab-pane fade in active">
+                                        <div class="form-group" style="margin-top:18px;">
+                                            <label>Zgjidh Vizitoret</label>
+                                            <select class="form-control select2 select2-hidden-accessible" id="selectVisitor"
+                                                    data-placeholder="Zgjidh nje vizitor" style="width: 100%;" tabindex="-1"
+                                                    aria-hidden="true" name="visitor">
+                                                <option></option>
+                                                @foreach ($visitors as $visitor)
+                                                    <option value="{{ $visitor->id }}">{{ $visitor->name }} {{ $visitor->surname }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="commingfrom">Nga Vjen</label>
+                                            <input name="commingfrom" type="text" id="commingfrom" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Do Takoj</label>
+                                            <select name="companies" id="companies" class="form-control">
+                                                <option value=""> Select</option>
+                                                @foreach ($companies as $company)
+                                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="checkbox" name="check" id="check" checked />
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="saveVisitor">Save changes</button>
+                                        </div>
+
+                                    </div>
+                                    <div id="create_new" class="tab-pane fade">
+                                        <form role="form" action="{{ route('visitor.ajaxStore') }}" method="post"
+                                              enctype="multipart/form-data">
+                                            {{ csrf_field() }}
+                                            <div class="col-lg-6">
+                                                <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+                                                    <label for="name">Visitor Name<sup>*</sup></label>
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name"
+                                                           value="{{ old('name') }}">
+                                                    @if ($errors->has('name'))
+                                                        <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
                                     </span>
-                                        @endif
-                                    </div>
-                                    <div class="form-group {{ $errors->has('surname') ? ' has-error' : '' }}">
-                                        <label for="surname">Visitor Surname<sup>*</sup></label>
-                                        <input type="text" class="form-control" id="surname" name="surname"
-                                               placeholder="Surname" value="{{ old('surname') }}">
-                                        @if ($errors->has('surname'))
-                                            <span class="help-block">
+                                                    @endif
+                                                </div>
+                                                <div class="form-group {{ $errors->has('surname') ? ' has-error' : '' }}">
+                                                    <label for="surname">Visitor Surname<sup>*</sup></label>
+                                                    <input type="text" class="form-control" id="surname" name="surname"
+                                                           placeholder="Surname" value="{{ old('surname') }}">
+                                                    @if ($errors->has('surname'))
+                                                        <span class="help-block">
                                         <strong>{{ $errors->first('surname') }}</strong>
                                     </span>
-                                        @endif
-                                    </div>
-                                    <label for="idnr">Visitor ID.nr<sup>*</sup></label>
-                                    <div class="input-group input-group-sm {{ $errors->has('idnr') ? ' has-error' : '' }}">
-                                        <input type="text" class="form-control" id="idnr" name="idnr"
-                                               placeholder="Id.nr" value="{{ old('idnr') }}">
-                                        @if ($errors->has('idnr'))
-                                            <span class="help-block">
+                                                    @endif
+                                                </div>
+                                                <label for="idnr">Visitor ID.nr<sup>*</sup></label>
+                                                <div class="input-group input-group-sm {{ $errors->has('idnr') ? ' has-error' : '' }}">
+                                                    <input type="text" class="form-control" id="idnr" name="idnr"
+                                                           placeholder="Id.nr" value="{{ old('idnr') }}">
+                                                    @if ($errors->has('idnr'))
+                                                        <span class="help-block">
                                                 <strong>{{ $errors->first('idnr') }}</strong>
                                             </span>
-                                        @endif
-                                        <span class="input-group-btn">
+                                                    @endif
+                                                    <span class="input-group-btn">
                                       <button type="button" id="read-manual-btn" class="btn btn-info btn-flat">Start Scanning</button>
                                     </span>
-                                    </div>
-                                    <br>
-                                    <div class="form-group"> <!-- Date input -->
-                                        <label class="control-label" for="date">Birth Date</label>
-                                        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY"
-                                               type="text"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="gender">Gender</label>
-                                        <select name="gender" id="gender" class="form-control">
-                                            <option value="Not Specified">Gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="state">State</label>
-                                        <input type="text" class="form-control" id="state" name="state"
-                                               placeholder="State" value="{{ old('state') }}">
-                                    </div>
-                                    <label for="email">Email</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">@</span>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                               placeholder="visitor@domain.com" value="{{ old('email') }}">
-                                    </div>
-                                    <br>
-                                    <div class="form-group">
-                                        <label for="phone">Phone</label>
-                                        <input type="text" class="form-control" id="phone" name="phone"
-                                               placeholder="Phone Number" value="{{ old('phone') }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="comments">Visitor Comments</label>
-                                        <input type="text" class="form-control" id="comments" name="comments"
-                                               placeholder="Comments" value="{{ old('comments') }}">
-                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="form-group"> <!-- Date input -->
+                                                    <label class="control-label" for="date">Birth Date</label>
+                                                    <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY"
+                                                           type="text"/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="gender">Gender</label>
+                                                    <select name="gender" id="gender" class="form-control">
+                                                        <option value="Not Specified">Gender</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="state">State</label>
+                                                    <input type="text" class="form-control" id="state" name="state"
+                                                           placeholder="State" value="{{ old('state') }}">
+                                                </div>
+                                                <label for="email">Email</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">@</span>
+                                                    <input type="email" class="form-control" id="email" name="email"
+                                                           placeholder="visitor@domain.com" value="{{ old('email') }}">
+                                                </div>
+                                                <br>
+                                                <div class="form-group">
+                                                    <label for="phone">Phone</label>
+                                                    <input type="text" class="form-control" id="phone" name="phone"
+                                                           placeholder="Phone Number" value="{{ old('phone') }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="comments">Visitor Comments</label>
+                                                    <input type="text" class="form-control" id="comments" name="comments"
+                                                           placeholder="Comments" value="{{ old('comments') }}">
+                                                </div>
 
+                                                <div class="form-group">
+                                                    <button type="submit" id="addVisitor" class="btn btn-primary">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
+
                             </div>
                             <br>
-
-                            <div class="box-footer">
-                                <button type="submit" id="addVisitor" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
 @endsection
 
@@ -318,7 +346,7 @@
 
     <script>
         $(document).ready(function () {
-            $("#myModal").on("show.bs.modal", function (e) {
+            $("#dynamic-modal").on("show.bs.modal", function (e) {
                 var id = $(e.relatedTarget).data('target-id');
                 $.get("/controller/" + id, function (data) {
                     $(".modal-body").html(data.html);
@@ -339,18 +367,28 @@
             })
         })
     </script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script>
+        $('#check').bootstrapToggle({
+            on: 'Check in',
+            off: 'Check out',
+            onstyle: 'success',
+            offstyle: 'danger'
+        });
+
+    </script>
+
 
     <script>
         $('#saveVisitor').click(function () {
-            var modal = $('#myModal');
+            var modal = $('#dynamic-modal');
             var visitorId = modal.find('#selectVisitor');
             var commingfrom = modal.find('#commingfrom');
             var companies = modal.find('#companies');
-
             $('#addVisitors').append('<tr><td>' + visitorId.val() + '</td><td>' + visitorId.select2('data')[0].text + '</td><td>' + commingfrom.val() + '</td><td>' + companies.val() + '</td><td><button type="button" class="removebutton" data-id="' + visitorId.val() + '" onclick="removeVisitorItem()">x</button></td></tr>');
             $('#addVisitors').append('<input type="hidden" id="visitorHidden'+visitorId.val()+'" name=visitVisitors[] value="' + visitorId.val() + '"/>');
             // $('#addVisitors').append('<input type="hidden" name=visitCompanies[] value="' + companies.val() + '"/>');
-            visitorId.val('');
+            visitorId.val('').trigger('change.select2');
             commingfrom.val('');
             companies.val('');
             modal.modal('hide');
@@ -358,8 +396,9 @@
 
         function removeVisitorItem() {
             $(document).on('click', 'button.removebutton', function () {
+                var currId = $(this).attr('data-id');
                 $(this).closest('tr').remove();
-                return false;
+                $("#visitorHidden"+currId).remove();
             });
             //var currId = $(this).data("id");
             //console.log(currId);
@@ -440,7 +479,7 @@
                     },
                     callbackReadFail: function (data) {
                         console.log("Fail: ", data);
-                        alert("There is an error");
+                        alert("Ka ndodhur nje gabim");
 
                     },
                     callbackDisconnect: function () {
