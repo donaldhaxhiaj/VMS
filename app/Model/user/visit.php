@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class visit extends Model
 {
-    public function companies()
-    {
-        return $this->belongsToMany('App\Model\user\company','visit_visitors');
-    }
+
     public function visitors()
     {
-        return $this->belongsToMany('App\Model\user\visitor','visit_visitors');
+        return $this->belongsToMany('App\Model\user\visitor','visit_visitors')->withTimestamps();
     }
-    public function getRouteKeyName()
+
+    public function companies()
     {
-        return 'slug';
+        return $this->belongsToMany('App\Model\user\company','visit_companies');
     }
+
+
 }

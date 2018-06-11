@@ -5,11 +5,6 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/select2/select2.min.css') }}">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-    <style>
-        .toggle.btn {
-            min-width: 110px !important;
-        }
-    </style>
 @endsection
 
 @section('main-content')
@@ -57,8 +52,15 @@
                                         </div>
                                     </div>
 
-
-
+                                    <div class="form-group">
+                                        <label>Do Takoj</label>
+                                        <select name="companies" id="companies" class="form-control">
+                                            <option value=""> Select</option>
+                                            @foreach ($companies as $company)
+                                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="plan">Visit Plan</label>
@@ -68,60 +70,31 @@
                                             <option value="Unplanned">Unplanned</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="status">Visit Status</label>
-                                        <select name="status" id="status" class="form-control">
-                                            <option value="selected disable">Visit Status</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Ongoing">Ongoing</option>
-                                            <option value="Refused">Refused</option>
-                                            <option value="Finished">Finished</option>
-                                        </select>
-                                    </div>
-                                    <div class="bootstrap-iso">
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                <div class="">
-                                                    <!-- Form code begins -->
-                                                    <div class="form-group"> <!-- Date input -->
-                                                        <label class="control-label" for="date">Date</label>
-                                                        <input class="form-control" id="date" name="date"
-                                                               placeholder="MM/DD/YYY" type="text"/>
-                                                    </div>
-                                                    <!-- Form code ends -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="time">Visit Starting Time</label>
-                                        <input type="time" class="form-control" id="time" name="time">
-                                        <label for="endtime">Visit Ending Time</label>
-                                        <input type="time" class="form-control" id="endtime" name="endtime">
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="comments">Visit Comments</label>
                                         <textarea name="comments" id="comments" class="xlarge form-control"
                                                   style="margin: 0px 332.656px 0px 0px;"></textarea>
                                     </div>
                                     <div class="jumbotron">
-                                        <div class="form-group">
-                                            <button type="button"
-                                                    class="btn btn-success load-ajax-modal"
-                                                    role="button"
-                                                    data-toggle="modal" data-target="#dynamic-modal">
-                                                <span class="glyphicon glyphicon-plus-sign"></span> Add Visitor
-                                            </button>
+                                        <div class="row">
+                                            <div class="col-xs-11 col-xs-offset-1">
+                                                <button type="button"
+                                                        class="btn btn-success load-ajax-modal"
+                                                        role="button"
+                                                        data-toggle="modal" data-target="#dynamic-modal">
+                                                    <span class="glyphicon glyphicon-plus-sign"></span> Add Visitor
+                                                </button>
+                                            </div>
                                         </div>
 
 
                                         <table class="table no-margin text-center">
                                             <thead>
                                             <tr>
-                                                <th>Visitor ID</th>
-                                                <th>Visitor Name</th>
-                                                <th>Comming from</th>
-                                                <th>Will meet</th>
+                                                <th>Vizitori</th>
+                                                <th>Perfaqeson</th>
+                                                <th>Status</th>
                                                 <th></th>
                                             </tr>
 
@@ -137,21 +110,21 @@
                             </div>
 
 
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="submit" class="btn btn-primary" name="startVisit" value="start-visit"
-                                style="background-color: #5ab738">Submit & Start
-                        </button>
-                        <a href="{{ route('visit.index') }}" class="btn btn-warning">Back</a>
-                    </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary" name="newVisit" value="new-visit">Submit</button>
+                            <button type="submit" class="btn btn-primary" name="startVisit" value="start-visit"
+                                    style="background-color: #5ab738">Submit & Start
+                            </button>
+                            <a href="{{ route('visit.index') }}" class="btn btn-warning">Back</a>
+                        </div>
 
-                    </form>
-                </div>
+                        </form>
+                    </div>
                 <!-- /.box -->
 
             </div>
             <!-- /.col-->
-
+            </div>
             <!-- ./row -->
         </section>
         <!-- /.content -->
@@ -193,9 +166,13 @@
                         <!-- form start -->
 
                             <div class="box-body">
+                                <div class="form-group">
+                                    <button type="button" id="read-manual-btn" class="btn btn-info"><i class="fa fa-id-card" aria-hidden="true"></i>
+                                          Lexo nga Skaner</button>
+                                </div>
                                 <ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#search">Zgjidh</a></li>
-                                    <li><a data-toggle="tab" href="#create_new">Krijo te ri</a></li>
+                                    <li class="active"><a data-toggle="tab" id="zgjidh" href="#search">Zgjidh</a></li>
+                                    <li><a data-toggle="tab" id="new" href="#create_new">Krijo te ri</a></li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -212,23 +189,15 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="commingfrom">Nga Vjen</label>
+                                            <label for="commingfrom">Perfaqeson</label>
                                             <input name="commingfrom" type="text" id="commingfrom" class="form-control"/>
                                         </div>
+
                                         <div class="form-group">
-                                            <label>Do Takoj</label>
-                                            <select name="companies" id="companies" class="form-control">
-                                                <option value=""> Select</option>
-                                                @foreach ($companies as $company)
-                                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <!--<input type="checkbox" name="check" id="check" checked />-->
                                         </div>
                                         <div class="form-group">
-                                            <input type="checkbox" name="check" id="check" checked />
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-primary" id="saveVisitor">Save changes</button>
+                                            <button type="button" class="btn btn-primary" id="saveVisitor">Zgjidh visitor</button>
                                         </div>
 
                                     </div>
@@ -236,9 +205,9 @@
                                         <form role="form" action="{{ route('visitor.ajaxStore') }}" method="post"
                                               enctype="multipart/form-data">
                                             {{ csrf_field() }}
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-10" style="padding: 30px">
                                                 <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
-                                                    <label for="name">Visitor Name<sup>*</sup></label>
+                                                    <label for="name">Visitor Name<sup style="color: red">*</sup></label>
                                                     <input type="text" class="form-control" id="name" name="name" placeholder="Name"
                                                            value="{{ old('name') }}">
                                                     @if ($errors->has('name'))
@@ -248,7 +217,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="form-group {{ $errors->has('surname') ? ' has-error' : '' }}">
-                                                    <label for="surname">Visitor Surname<sup>*</sup></label>
+                                                    <label for="surname">Visitor Surname<sup style="color: red">*</sup></label>
                                                     <input type="text" class="form-control" id="surname" name="surname"
                                                            placeholder="Surname" value="{{ old('surname') }}">
                                                     @if ($errors->has('surname'))
@@ -257,20 +226,16 @@
                                     </span>
                                                     @endif
                                                 </div>
-                                                <label for="idnr">Visitor ID.nr<sup>*</sup></label>
-                                                <div class="input-group input-group-sm {{ $errors->has('idnr') ? ' has-error' : '' }}">
+                                                <label for="idnr">Visitor ID.nr<sup style="color: red">*</sup></label>
+                                                <div class="form-group {{ $errors->has('idnr') ? ' has-error' : '' }}">
                                                     <input type="text" class="form-control" id="idnr" name="idnr"
-                                                           placeholder="Id.nr" value="{{ old('idnr') }}">
+                                                           placeholder="Id.nr" >
                                                     @if ($errors->has('idnr'))
                                                         <span class="help-block">
                                                 <strong>{{ $errors->first('idnr') }}</strong>
                                             </span>
                                                     @endif
-                                                    <span class="input-group-btn">
-                                      <button type="button" id="read-manual-btn" class="btn btn-info btn-flat">Start Scanning</button>
-                                    </span>
                                                 </div>
-                                                <br>
                                                 <div class="form-group"> <!-- Date input -->
                                                     <label class="control-label" for="date">Birth Date</label>
                                                     <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY"
@@ -307,9 +272,13 @@
                                                     <input type="text" class="form-control" id="comments" name="comments"
                                                            placeholder="Comments" value="{{ old('comments') }}">
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="commingfrom">Perfaqeson</label>
+                                                    <input name="commingfrom" type="text" id="commingfrom" class="form-control"/>
+                                                </div>
 
                                                 <div class="form-group">
-                                                    <button type="submit" id="addVisitor" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" id="addVisitor" class="btn btn-primary">Shto vizitor</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -323,6 +292,7 @@
             </div>
         </div>
     </div>
+
 
 
 @endsection
@@ -368,47 +338,49 @@
         })
     </script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <script>
-        $('#check').bootstrapToggle({
-            on: 'Check in',
-            off: 'Check out',
-            onstyle: 'success',
-            offstyle: 'danger'
-        });
-
-    </script>
-
 
     <script>
         $('#saveVisitor').click(function () {
             var modal = $('#dynamic-modal');
             var visitorId = modal.find('#selectVisitor');
             var commingfrom = modal.find('#commingfrom');
-            var companies = modal.find('#companies');
-            $('#addVisitors').append('<tr><td>' + visitorId.val() + '</td><td>' + visitorId.select2('data')[0].text + '</td><td>' + commingfrom.val() + '</td><td>' + companies.val() + '</td><td><button type="button" class="removebutton" data-id="' + visitorId.val() + '" onclick="removeVisitorItem()">x</button></td></tr>');
-            $('#addVisitors').append('<input type="hidden" id="visitorHidden'+visitorId.val()+'" name=visitVisitors[] value="' + visitorId.val() + '"/>');
-            // $('#addVisitors').append('<input type="hidden" name=visitCompanies[] value="' + companies.val() + '"/>');
-            visitorId.val('').trigger('change.select2');
-            commingfrom.val('');
-            companies.val('');
-            modal.modal('hide');
+
+            var visitorIdValue = visitorId.val();
+            var commingfromValue = commingfrom.val();
+//visitorId.val()
+            if(!$('#tr-visitor-'+visitorIdValue).length) {
+                $('#addVisitors').append('<tr id="tr-visitor-' + visitorIdValue + '"><td>' + visitorId.select2('data')[0].text + '</td><td>' + commingfromValue + '</td><td>Regjistruar</td><td>' +
+                    '<button type="button" class="btn btn-xs btn-danger" role="button" onclick="removeVisitorItem(' + visitorIdValue + ')">' +
+                    '<span class="glyphicon glyphicon-remove"></span>' +
+                    '</button>' +
+                    '<input type ="hidden" name="visitorIds[]" value="'+visitorIdValue+'">' +
+                    '<input type ="hidden" name="commingfrom[]" value="'+commingfromValue+'">' +
+                    '</td></tr>');
+                // $('#addVisitors').append('<input type="hidden" id="visitorHidden'+visitorId.val()+'" name=visitVisitors[] value="' + visitorId.val() + '"/>');
+                // $('#addVisitors').append('<input type="hidden" name=visitCompanies[] value="' + companies.val() + '"/>');
+
+                visitorId.val('').trigger('change.select2');
+                commingfrom.val('');
+                modal.modal('hide');
+            }else{
+                alert("Eshte zgjedhur njehere ky vizitor")//duhet bere me popup
+            }
         });
 
-        function removeVisitorItem() {
-            $(document).on('click', 'button.removebutton', function () {
-                var currId = $(this).attr('data-id');
-                $(this).closest('tr').remove();
+
+        function removeVisitorItem(currId) {
+                $('tr#tr-visitor-'+currId).remove();
                 $("#visitorHidden"+currId).remove();
-            });
-            //var currId = $(this).data("id");
-            //console.log(currId);
-            //$(this).parent().parent().remove();
-            //$(currId).remove();
         }
 
     </script>
 
+
+
+
     <script>
+        // loaded on doc creation ???
+        // duhet kur shtyp butonin save
         $(document).ready(function () {
             var modal = $('#dynamic-modal');
             var form = modal.find('form');

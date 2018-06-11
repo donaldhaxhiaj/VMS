@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class visit_visitors extends Model
 {
-    //
-    protected $fillable = ['visitor_id', 'company_id'];
+
+
 }

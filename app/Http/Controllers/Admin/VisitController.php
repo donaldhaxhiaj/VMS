@@ -53,11 +53,8 @@ class VisitController extends Controller
     {
         $this->validate($request,[
 
-
-
         ]);
         $visit = new visit;
-        $visit->group = $request->group;
         $visit->purpose = $request->purpose;
         $visit->purposetext = $request->purposetext;
         $visit->plan = $request->plan;
@@ -66,18 +63,37 @@ class VisitController extends Controller
         $visit->time = $request->time;
         $visit->endtime = $request->endtime;
         $visit->comments = $request->comments;
-        if (isset($request->startVisit) && $request->startVisit == "start-visit") {
-             $visit->status = "Ongoing";
-         }
-        if (isset($request->startVisit) && $request->startVisit == "start-visit") {
-            $visit->time = now();
+        if (isset($request->newVisit) && $request->newVisit == "new-visit") {
+            $visit->status = "Pending";
+            $visit->date = now();
         }
+        if (isset($request->startVisit) && $request->startVisit == "start-visit") {
+            $visit->status = "Ongoing";
+            $visit->time = now();
+         }
         $visit->save();
 
-       // $visit->visitVisitors()->sync($request->visitVisitors);
-        //$visit->companies()->sync($request->visitCompanies);
-        $visit->visitors()->sync($request->visitors);
         $visit->companies()->sync($request->companies);
+
+        $data = array();
+        foreach ($request->visitorIds as $visitorIndex => $visitorId) {
+            $data[$visitorId] =  array("commingfrom" => $request->commingfrom[$visitorIndex]);
+        }
+
+        $visit->visitors()->sync($data);
+        //dd($data);
+
+        /*$visit->visitors()->sync(array(
+            5 => array( "commingfrom" => "test" ),
+            12 => array( "commingfrom"  => "test2" )
+        ));*/
+
+
+
+
+
+        // $visit->visitVisitors()->sync($request->visitVisitors);
+        //$visit->companies()->sync($request->visitCompanies);
 
         return redirect(route('visit.index'))->with('message','Visit Created Successfully');
     }
@@ -121,7 +137,6 @@ class VisitController extends Controller
 
         ]);
         $visit = visit::find($id);
-        $visit->group = $request->group;
         $visit->purpose = $request->purpose;
         $visit->plan = $request->plan;
         $visit->status = $request->status;
@@ -129,10 +144,17 @@ class VisitController extends Controller
         $visit->time = $request->time;
         $visit->endtime = $request->endtime;
         $visit->comments = $request->comments;
-        $visit->save();
-        $visit->companies()->sync($request->companies);
         $visit->visitors()->sync($request->visitors);
+        if (isset($request->startVisit) && $request->startVisit == "start-visit") {
+            $visit->time = now();
+        }
+        $data = array();
+        foreach ($request->visitorIds as $visitorIndex => $visitorId) {
+            $data[$visitorId] =  array("commingfrom" => $request->commingfrom[$visitorIndex]);
+        }
 
+        $visit->visitors()->sync($data);
+        $visit->save();
         return redirect(route('visit.index'))->with('message','Visit Updated Successfully');
     }
 

@@ -42,6 +42,10 @@
                                         @endif
                                     </div>
                                     <div class="form-group">
+                                        <label for="cel">Cel</label>
+                                        <input type="number" class="form-control" id="cel" name="cel">
+                                    </div>
+                                    <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                         <a href="{{ route('company.index') }}" class="btn btn-warning">Back</a>
                                     </div>

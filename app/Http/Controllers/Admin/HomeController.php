@@ -25,4 +25,9 @@ class HomeController extends Controller
         return view('admin.home',compact('visitors'));
 
     }
+
+    public function showChangePasswordForm(){
+        return view('auth.changepassword');
+    }
 }
+

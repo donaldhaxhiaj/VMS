@@ -39,6 +39,7 @@
                                     <th>S.No</th>
                                     <th>Company Name</th>
                                     <th>Person To Meet</th>
+                                    <th>Tel</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
@@ -49,6 +50,7 @@
                                     <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ $company->name }}</td>
                                     <td>{{ $company->ptm }}</td>
+                                    <td>{{ $company->cel }}</td>
                                     <td><a href="{{ route('company.edit',$company->id) }}"><span class="glyphicon glyphicon-edit"></span></a></td>
                                     <td>
                                         <form id="delete-form-{{ $company->id }}" method="post" action="{{ route('company.destroy',$company->id) }}" style="display: none">

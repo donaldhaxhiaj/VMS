@@ -51,6 +51,7 @@ class CompanyController extends Controller
         $company = new company;
         $company->name = $request->name;
         $company->ptm = $request->ptm;
+        $company->cel = $request->cel;
         $company->save();
         return redirect(route('company.index'))->with('message','Company Created Successfully');
     }
@@ -74,7 +75,8 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $company = company::where('id',$id)->first();
+        return view('admin.company.edit',compact('company'));
     }
 
     /**
@@ -86,7 +88,16 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required',
+            'ptm' => 'required',
+        ]);
+        $company = company::find($id);
+        $company->name = $request->name;
+        $company->ptm = $request->ptm;
+        $company->cel = $request->cel;
+        $company->save();
+        return redirect(route('company.index'))->with('message','Company Updated Successfully');
     }
 
     /**
@@ -97,6 +108,7 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        company::where('id',$id)->delete();
+        return redirect()->back()->with('message','Company Deleted Successfully');
     }
 }

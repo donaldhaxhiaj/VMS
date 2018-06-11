@@ -31,7 +31,7 @@
                             <div class="box-body">
                                 <div class="col-lg-6">
                                 <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <label for="name">Visitor Name<sup>*</sup></label>
+                                    <label for="name">Visitor Name<sup style="color: red">*</sup></label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ old('name') }}">
                                     @if ($errors->has('name'))
                                         <span class="help-block">
@@ -40,7 +40,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group {{ $errors->has('surname') ? ' has-error' : '' }}">
-                                    <label for="surname">Visitor Surname<sup>*</sup></label>
+                                    <label for="surname">Visitor Surname<sup style="color: red">*</sup></label>
                                     <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname" value="{{ old('surname') }}">
                                     @if ($errors->has('surname'))
                                         <span class="help-block">
@@ -48,7 +48,7 @@
                                     </span>
                                     @endif
                                 </div>
-                                <label for="idnr">Visitor ID.nr<sup>*</sup></label>
+                                <label for="idnr">Visitor ID.nr<sup style="color: red">*</sup></label>
                                 <div class="input-group input-group-sm {{ $errors->has('idnr') ? ' has-error' : '' }}">
                                     <input type="text" class="form-control" id="idnr" name="idnr" placeholder="Id.nr" value="{{ old('idnr') }}">
                                         @if ($errors->has('idnr'))

@@ -20,79 +20,38 @@
                     @include('includes.messages')
                     <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" action="{{ route('role.update',$role->id) }}" method="post">
+                        <form role="form" action="{{ route('company.update',$company->id) }}" method="post">
                             {{ csrf_field() }}
                             {{ method_field('PATCH') }}
                             <div class="box-body">
                                 <div class="col-lg-offset-3 col-lg-6">
                                     <div class="form-group">
-                                        <label for="name">Role Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Role Name" value="{{ $role->name }}">
+                                        <label for="name">Company Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Company Name" value="{{ $company->name }}">
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <label for="name">Visitors Permissions</label>
-                                            @foreach ($permissions as $permission)
-                                                @if ($permission->for == 'visitor')
-                                                    <div class="checkbox">
-                                                        <label><input type="checkbox" name="permission[]" value="{{ $permission->id }}"
-                                                                      @foreach ($role->permissions as $role_permit)
-                                                                      @if ($role_permit->id == $permission->id)
-                                                                      checked
-                                                                    @endif
-                                                                    @endforeach
-                                                            >{{ $permission->name }}</label>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-
-                                        </div>
-
-                                        <div class="col-lg-4">
-                                            <label for="name">User Permissions</label>
-                                            @foreach ($permissions as $permission)
-                                                @if ($permission->for == 'user')
-                                                    <div class="checkbox">
-                                                        <label><input type="checkbox" name="permission[]" value="{{ $permission->id }}"
-                                                                      @foreach ($role->permissions as $role_permit)
-                                                                      @if ($role_permit->id == $permission->id)
-                                                                      checked
-                                                                    @endif
-                                                                    @endforeach
-                                                            >{{ $permission->name }}</label>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-
-                                        </div>
-
-                                        <div class="col-lg-4">
-                                            <label for="name">Other Permissions</label>
-                                            @foreach ($permissions as $permission)
-                                                @if ($permission->for == 'other')
-                                                    <div class="checkbox">
-                                                        <label><input type="checkbox" name="permission[]" value="{{ $permission->id }}"
-                                                                      @foreach ($role->permissions as $role_permit)
-                                                                      @if ($role_permit->id == $permission->id)
-                                                                      checked
-                                                                    @endif
-                                                                    @endforeach
-                                                            >{{ $permission->name }}</label>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                        </div>
+                                    <div class="form-group {{ $errors->has('ptm') ? ' has-error' : '' }}">
+                                        <label for="ptm">Person To Meet</label>
+                                        <input type="text" class="form-control" id="ptm" name="ptm" placeholder="Person To Meet" value="{{ $company->ptm }}">
+                                        @if ($errors->has('ptm'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('ptm') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cel">Cel</label>
+                                        <input type="number" class="form-control" id="cel" name="cel" value="{{ $company->cel }}">
                                     </div>
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Submit</button>
-                                        <a href="{{ route('role.index') }}" class="btn btn-warning">Back</a>
+                                        <a href="{{ route('company.index') }}" class="btn btn-warning">Back</a>
                                     </div>
 
 
                                 </div>
-                            </div>
+
                         </form>
                     </div>
                     <!-- /.box -->

@@ -40,6 +40,9 @@ Route::group(['namespace' => 'Admin'],function() {
     Route::get('admin-logout', 'Auth\LoginController@logout')->name('logout');
 });
 
+Route::get('changePassword','HomeController@showChangePasswordForm');
+
+
 
 Auth::routes();
 

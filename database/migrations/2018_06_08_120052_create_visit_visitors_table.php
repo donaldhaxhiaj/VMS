@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVisitsTable extends Migration
+class CreateVisitVisitorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -20,12 +20,22 @@ class CreateVisitsTable extends Migration
             $table->string('group');
             $table->string('purpose');
             $table->string('other');
-            $table->string('willmeet');
+            $table->integer('company_id')->unsigned()->index();
             $table->string('plan');
             $table->string('status');
             $table->time('time');
             $table->time('endtime');
             $table->string('comments');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('visit_visitors', function (Blueprint $table) {
+            $table->integer('visit_id')->unsigned()->index();
+            $table->integer('visitor_id')->unsigned()->index();
+            $table->string('commingfrom')->index();
+            $table->foreign('visit_id')->references('id')->on('visits')->onDelete('cascade');
+            $table->foreign('visitor_id')->references('id')->on('visitors')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -37,6 +47,7 @@ class CreateVisitsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('visit_visitors');
         Schema::dropIfExists('visits');
     }
 }

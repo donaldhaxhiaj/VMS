@@ -9,9 +9,7 @@ class visitor extends Model
 {
     public function visits()
     {
-        return $this->belongsToMany('App\Model\user\visit','visit_visitors')->withTimestamps();
+        return $this->belongsToMany('App\Model\user\visit','visit_visitors');
     }
-
-
 
 }

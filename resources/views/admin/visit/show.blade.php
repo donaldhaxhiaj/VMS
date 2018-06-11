@@ -43,13 +43,12 @@
                                 <tr>
                                     <th>S.No</th>
                                     <th>Visit Purpose</th>
-                                    <th>Will Meet</th>
-                                    <th>Visitors</th>
+                                    {{--<th>Will Meet</th>--}}
                                     <th>Status</th>
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>End Time</th>
-                                    <th>Visitor Exit</th>
+                                    <th>Vizitoret</th>
                                     @can('visits.update',Auth::user())
                                         <th>Edit</th>
                                     @endcan
@@ -71,20 +70,21 @@
                                                 {{ $visit->purpose }}
                                             </td>
                                         @endif
-                                        <td> @foreach ($visit->companies as $company)
+                                       {{-- <td> @foreach ($visit->companies as $company)
                                                 {{ $company->name }}
                                             @endforeach
-                                        </td>
-                                        <td> @foreach ($visit->visitors as $visitor)
-                                                {{ $visitor->name }}
-                                            @endforeach
-                                        </td>
+                                        </td>--}}
                                         <td>{{ $visit->status}}</td>
                                         <td>{{ $visit->date}}</td>
                                         <td>{{ $visit->time}}</td>
                                         <td>{{ $visit->endtime}}</td>
                                         <td>
-                                            <a href="#" data-toggle="popover" data-placement="left" title="Visitor Info" data-content="{{ $visit->visitors }}">
+                                            <a href="#" data-toggle="popover" data-placement="left" title="Visitor Info" data-content="
+                                            <dl>
+                                            @foreach ($visit->visitors as $visitor)
+                                                    <dt></dt><dd>{{ $visitor->name }}</dd>
+                                            @endforeach</dl>">
+
                                                 <span class="glyphicon glyphicon-info-sign"></span></a>
                                         </td>
                                         @can('visits.update',Auth::user())
