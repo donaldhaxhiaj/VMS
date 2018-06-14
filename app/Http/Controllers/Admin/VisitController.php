@@ -140,6 +140,7 @@ class VisitController extends Controller
         }
         if (isset($request->endVisit) && $request->endVisit == "end-visit") {
             $visit->status = "Refused";
+            $visit->enddate = now();
         }
         if (isset($request->finishVisit) && $request->finishVisit == "finish-visit") {
             $visit->status = "Finished";

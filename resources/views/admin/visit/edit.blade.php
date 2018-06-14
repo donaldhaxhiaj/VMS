@@ -35,31 +35,39 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="purpose">Visit Purpose</label>
-                                        <select name="purpose" id="purpose" class="form-control">
-                                            <option value="selected disable" disabled>Visit Purpose</option>
-                                            <option value="Queries regarding products and services" @if($visit->purpose == 'Queries regarding products and services') selected="selected"@endif disabled>Queries regarding
-                                                products and services
-                                            </option>
-                                            <option value="Marketing"  @if($visit->purpose == 'Marketing') selected="selected"@endif disabled>Marketing</option>
-                                            <option value="Complaints"  @if($visit->purpose == 'Complaints') selected="selected"@endif disabled>Complaints</option>
-                                            <option value="Job Meetings"  @if($visit->purpose == 'Job Meetings') selected="selected"@endif disabled>Job Meetings</option>
-                                            <option value="Bussines Meetings"  @if($visit->purpose == 'Bussines Meetings') selected="selected"@endif disabled>Bussines Meetings</option>
-                                            <option value="Other"  @if($visit->purpose == 'Other') selected="selected"@endif disabled>Other</option>
-                                        </select>
-                                        <div id="purpose-block" style="display: none;">
-                                            <label for="purposetext">Other Purpose</label>
-                                            <input type="text" class="form-control" readonly id="purpose" name="purposetext"
-                                                   placeholder="Purpose" value="{{ $visit->purposetext }}">
-                                        </div>
+                                        @if ($visit->status !== "Pending")
+                                        <br><span readonly>{{ $visit->purpose }}</span>
+                                            @else
+                                            <select name="purpose" id="purpose" class="form-control">
+                                                <option value="selected disable" disabled>Visit Purpose</option>
+                                                <option value="Queries regarding products and services" @if($visit->purpose == 'Queries regarding products and services') selected="selected"@endif disabled>Queries regarding
+                                                    products and services
+                                                </option>
+                                                <option value="Marketing"  @if($visit->purpose == 'Marketing') selected="selected"@endif>Marketing</option>
+                                                <option value="Complaints"  @if($visit->purpose == 'Complaints') selected="selected"@endif>Complaints</option>
+                                                <option value="Job Meetings"  @if($visit->purpose == 'Job Meetings') selected="selected"@endif>Job Meetings</option>
+                                                <option value="Bussines Meetings"  @if($visit->purpose == 'Bussines Meetings') selected="selected"@endif>Bussines Meetings</option>
+                                                <option value="Other"  @if($visit->purpose == 'Other') selected="selected"@endif disabled>Other</option>
+                                            </select>
+                                            <div id="purpose-block" style="display: none;">
+                                                <label for="purposetext">Other Purpose</label>
+                                                <input type="text" class="form-control" id="purpose" name="purposetext"
+                                                       placeholder="Purpose" value="{{ $visit->purposetext }}">
+                                            </div>
+                                        @endif
+
                                     </div>
 
                                     <div class="form-group">
                                         <label>Do Takoj</label>
-
+                                        @if ($visit->status !== "Pending")
+                                            <br><span>
+                                                {{ $visit->company->name }}</span>
+                                        @else
                                         <select name="companies" id="companies" class="form-control">
                                             <option value=""> Select</option>
                                             @foreach ($companies as $company)
-                                                <option value="{{ $company->id }}" disabled
+                                                <option value="{{ $company->id }}"
                                                     @if ($company->id == $visit->company_id)
                                                          selected
                                                     @endif
@@ -67,13 +75,19 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    @endif
 
 
                                     <div class="form-group">
                                         <label for="comments">Visit Comments</label>
+                                        @if ($visit->status !== 'Pending')
+                                            <br><pre>{{ $visit->comments }}</pre>
+                                        @else
                                         <textarea name="comments" id="comments" class="xlarge form-control" readonly
                                                   style="margin: 0px 332.656px 0px 0px;">{{ old('comments',$visit->comments) }}</textarea>
+                                            @endif
                                     </div>
+
                                     <div class="jumbotron">
                                         <div class="row">
                                             <div class="col-xs-11 col-xs-offset-1">
@@ -143,6 +157,7 @@
                                 @endif
                                     @if ($visit->status == "Refused")
                                         @elseif($visit->status == "Finished")
+                                    @elseif($visit->status == "Ongoing")
 
                                     @else
                                 <button class="btn btn-danger" name="endVisit" id="button" value="end-visit" >Anullo Viziten</button>

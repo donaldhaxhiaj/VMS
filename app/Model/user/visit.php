@@ -12,5 +12,9 @@ class visit extends Model
         return $this->belongsToMany('App\Model\user\visitor','visit_visitors')->withTimestamps();
     }
 
+    public function company()
+    {
+        return $this->hasOne('App\Model\user\company','id','company_id');
+    }
 
 }
