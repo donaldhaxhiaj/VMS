@@ -106,9 +106,10 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        company::where('id',$id)->delete();
-        return redirect()->back()->with('message','Company Deleted Successfully');
+        $company = Company::findOrFail($request->visit_id);
+        $company->delete();
+        return back()->with('message','Company is deleted successfully');
     }
 }

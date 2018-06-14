@@ -36,52 +36,43 @@
                                     <div class="form-group">
                                         <label for="purpose">Visit Purpose</label>
                                         <select name="purpose" id="purpose" class="form-control">
-                                            <option value="selected disable">Visit Purpose</option>
-                                            <option value="Queries regarding products and services" @if($visit->purpose == 'Queries regarding products and services') selected="selected"@endif>Queries regarding
+                                            <option value="selected disable" disabled>Visit Purpose</option>
+                                            <option value="Queries regarding products and services" @if($visit->purpose == 'Queries regarding products and services') selected="selected"@endif disabled>Queries regarding
                                                 products and services
                                             </option>
-                                            <option value="Marketing"  @if($visit->purpose == 'Marketing') selected="selected"@endif>Marketing</option>
-                                            <option value="Complaints"  @if($visit->purpose == 'Complaints') selected="selected"@endif>Complaints</option>
-                                            <option value="Job Meetings"  @if($visit->purpose == 'Job Meetings') selected="selected"@endif>Job Meetings</option>
-                                            <option value="Bussines Meetings"  @if($visit->purpose == 'Bussines Meetings') selected="selected"@endif>Bussines Meetings</option>
-                                            <option value="Other"  @if($visit->purpose == 'Other') selected="selected"@endif>Other</option>
+                                            <option value="Marketing"  @if($visit->purpose == 'Marketing') selected="selected"@endif disabled>Marketing</option>
+                                            <option value="Complaints"  @if($visit->purpose == 'Complaints') selected="selected"@endif disabled>Complaints</option>
+                                            <option value="Job Meetings"  @if($visit->purpose == 'Job Meetings') selected="selected"@endif disabled>Job Meetings</option>
+                                            <option value="Bussines Meetings"  @if($visit->purpose == 'Bussines Meetings') selected="selected"@endif disabled>Bussines Meetings</option>
+                                            <option value="Other"  @if($visit->purpose == 'Other') selected="selected"@endif disabled>Other</option>
                                         </select>
                                         <div id="purpose-block" style="display: none;">
                                             <label for="purposetext">Other Purpose</label>
-                                            <input type="text" class="form-control" id="purpose" name="purposetext"
+                                            <input type="text" class="form-control" readonly id="purpose" name="purposetext"
                                                    placeholder="Purpose" value="{{ $visit->purposetext }}">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Do Takoj</label>
+
                                         <select name="companies" id="companies" class="form-control">
                                             <option value=""> Select</option>
                                             @foreach ($companies as $company)
-                                                <option value="{{ $company->id }}"
-                                                        @foreach ($visit->companies as $visitTag)
-                                                        @if ($visitCompany->id == $company->id)
-                                                        selected
-                                                        @endif
-                                                        @endforeach
+                                                <option value="{{ $company->id }}" disabled
+                                                    @if ($company->id == $visit->company_id)
+                                                         selected
+                                                    @endif
                                                 >{{ $company->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="plan">Visit Plan</label>
-                                        <select name="plan" id="plan" class="form-control">
-                                            <option value="selected disable">Visit Plan</option>
-                                            <option value="Planned">Planned</option>
-                                            <option value="Unplanned">Unplanned</option>
-                                        </select>
-                                    </div>
 
                                     <div class="form-group">
                                         <label for="comments">Visit Comments</label>
-                                        <textarea name="comments" id="comments" class="xlarge form-control"
-                                                  style="margin: 0px 332.656px 0px 0px;"></textarea>
+                                        <textarea name="comments" id="comments" class="xlarge form-control" readonly
+                                                  style="margin: 0px 332.656px 0px 0px;">{{ old('comments',$visit->comments) }}</textarea>
                                     </div>
                                     <div class="jumbotron">
                                         <div class="row">
@@ -103,11 +94,33 @@
                                                 <th>Perfaqeson</th>
                                                 <th>Status</th>
                                                 <th></th>
+                                                <th></th>
                                             </tr>
 
                                             </thead>
                                             <tbody id="addVisitors">
-
+                                                @foreach ($visit->visitors as $visitor)
+                                                     <tr>
+                                                         <td>{{ $visitor->name }}</td>
+                                                         <td>{{ $visitor->commingfrom }}</td>
+                                                         <td>{{ $visitor->status }}</td>
+                                                         <td>
+                                                             <div class="btn-group" role="group">
+                                                                 <button type="button" class="btn btn-xs btn-danger" role="button" onclick="removeVisitorItem({{$visitor->id}})">
+                                                                     <span class="glyphicon glyphicon-remove"></span>
+                                                                 </button>
+                                                                 @if ($visitor->checked_out == 0)
+                                                                     <button type="button" class="btn btn-xs btn-success" role="button">
+                                                                         <span class="glyphicon glyphicon-check"></span> Checkout
+                                                                     </button>
+                                                                     <input type="hidden" name="visitorIds[]" value="{{$visitor->id}}">
+                                                                     <input type="hidden" name="commingfrom[]" value="{{$visitor->commingfrom}}">
+                                                                     <input type="hidden" name="checkedOut[]" value="{{$visitor->checkedOut}}">
+                                                                 @endif
+                                                             </div>
+                                                         </td>
+                                                     </tr>
+                                                    @endforeach
                                             </tbody>
                                             {{--<input type="hidden" name="visitVisitors[]" value="4,1"/>--}}
                                         </table>
@@ -118,11 +131,28 @@
 
 
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary" name="newVisit" value="new-visit">Submit</button>
-                                <button type="submit" class="btn btn-primary" name="startVisit" value="start-visit"
-                                        style="background-color: #5ab738">Submit & Start
-                                </button>
-                                <button><a href="{{ route('visit.index') }}" class="btn btn-warning" name="endVisit" value="end-visit">Mbaro Viziten</a></button>
+                                @if ($visit->status == "Ongoing")
+                                    @elseif($visit->status == "Refused")
+                                @elseif($visit->status == "Finished")
+
+                                @else
+                                    <button type="submit" class="btn btn-primary" name="startVisit" id="submit-button" value="start-visit"
+                                            style="background-color: #5ab738">Fillo Viziten
+                                    </button>
+
+                                @endif
+                                    @if ($visit->status == "Refused")
+                                        @elseif($visit->status == "Finished")
+
+                                    @else
+                                <button class="btn btn-danger" name="endVisit" id="button" value="end-visit" >Anullo Viziten</button>
+                                    @endif
+                                    @if ($visit->status == "Finished")
+                                        @elseif($visit->status == "Refused")
+
+                                    @else
+                                <button class="btn btn-warning" name="finishVisit" id="end" value="finish-visit">Perfundo Viziten</button>
+                                        @endif
                             </div>
 
                         </form>

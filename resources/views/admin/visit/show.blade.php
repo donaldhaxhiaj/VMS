@@ -138,7 +138,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-info" data-dismiss="modal">No, Cancel</button>
-                        <button type="submit" class="btn btn-adn">Yes, Delete</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
                     </div>
                 </form>
             </div>

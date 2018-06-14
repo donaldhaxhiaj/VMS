@@ -106,7 +106,7 @@
     </div>
     <!-- /.content-wrapper -->
     <!-- Modal -->
-    <div class="modal modal-danger fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,7 +125,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
-                        <button type="submit" class="btn btn-warning">Yes, Delete</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
                     </div>
                 </form>
             </div>

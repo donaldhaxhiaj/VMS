@@ -53,18 +53,8 @@
                                     <td>{{ $permission->for }}</td>
                                     <td><a href="{{ route('permission.edit',$permission->id) }}"><span class="glyphicon glyphicon-edit"></span></a></td>
                                     <td>
-                                        <form id="delete-form-{{ $permission->id }}" method="post" action="{{ route('permission.destroy',$permission->id) }}" style="display: none">
-                                            {{ csrf_field() }}
-                                            {{ method_field('DELETE') }}
-                                        </form>
-                                        <a href=""onclick="
-                                                if(confirm('Are you sure, You want to delete this?')){
-                                                event.preventDefault();
-                                                document.getElementById('delete-form-{{ $permission->id }}').submit();
-                                                }
-                                                else{
-                                                event.preventDefault();
-                                                }"><span class="glyphicon glyphicon-trash"></span></a>
+                                        <a href="" data-visitid={{$permission->id}} data-toggle="modal" data-target="#delete"><span
+                                                    class="glyphicon glyphicon-trash"></span></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -96,6 +86,32 @@
     </div>
     <!-- /.content-wrapper -->
 
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
+                </div>
+                <form action="{{route('permission.destroy','test')}}" method="post">
+                    {{method_field('delete')}}
+                    {{csrf_field()}}
+                    <div class="modal-body">
+                        <p class="text-center">
+                            Are you sure you want to delete this?
+                        </p>
+                        <input type="hidden" name="visit_id" id="visit_id" value="">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">No, Cancel</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
 @endsection
 
@@ -106,6 +122,15 @@
         $(function () {
             $("#example1").DataTable();
         });
+    </script>
+
+    <script>
+        $('#delete').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var visit_id = button.data('visitid');
+            var modal = $(this);
+            modal.find('.modal-body #visit_id').val(visit_id);
+        })
     </script>
 
 @endsection

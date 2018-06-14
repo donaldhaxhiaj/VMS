@@ -173,7 +173,7 @@ class VisitorController extends Controller
     {
         $visitor = Visitor::findOrFail($request->visit_id);
         $visitor->delete();
-        return back() ->with('message','Visitor Deleted Successfully');
+        return back()->with('message','Visitor Deleted Successfully');
 
     }
 }

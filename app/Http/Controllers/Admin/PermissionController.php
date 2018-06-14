@@ -108,10 +108,10 @@ class PermissionController extends Controller
      * @param  \App\Model\admin\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permission $permission)
+    public function destroy(Request $request)
     {
-
-        permission::where('id',$permission->id)->delete();
-        return redirect()->back()->with('message','Permission Deleted Successfully');
+        $permission = Permission::findOrFail($request->visit_id);
+        $permission->delete();
+        return back()->with('message','Permission is deleted successfully');
     }
 }

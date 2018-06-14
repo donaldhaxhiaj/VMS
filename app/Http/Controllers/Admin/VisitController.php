@@ -57,7 +57,6 @@ class VisitController extends Controller
         $visit = new visit;
         $visit->purpose = $request->purpose;
         $visit->purposetext = $request->purposetext;
-        $visit->plan = $request->plan;
         $visit->status = $request->status;
         $visit->date = $request->date;
         $visit->time = $request->time;
@@ -69,11 +68,14 @@ class VisitController extends Controller
         }
         if (isset($request->startVisit) && $request->startVisit == "start-visit") {
             $visit->status = "Ongoing";
+            $visit->date = now();
             $visit->time = now();
          }
+
+        $visit->company_id = $request->companies;
         $visit->save();
 
-        $visit->companies()->sync($request->companies);
+        // $visit->companies()->sync($request->companies);
 
         $data = array();
         foreach ($request->visitorIds as $visitorIndex => $visitorId) {
@@ -81,21 +83,8 @@ class VisitController extends Controller
         }
 
         $visit->visitors()->sync($data);
-        //dd($data);
 
-        /*$visit->visitors()->sync(array(
-            5 => array( "commingfrom" => "test" ),
-            12 => array( "commingfrom"  => "test2" )
-        ));*/
-
-
-
-
-
-        // $visit->visitVisitors()->sync($request->visitVisitors);
-        //$visit->companies()->sync($request->visitCompanies);
-
-        return redirect(route('visit.index'))->with('message','Visit Created Successfully');
+        return redirect()->route('visit.edit', $visit->id);
     }
 
     /**
@@ -138,7 +127,6 @@ class VisitController extends Controller
         ]);
         $visit = visit::find($id);
         $visit->purpose = $request->purpose;
-        $visit->plan = $request->plan;
         $visit->status = $request->status;
         $visit->date = $request->date;
         $visit->time = $request->time;
@@ -146,7 +134,15 @@ class VisitController extends Controller
         $visit->comments = $request->comments;
         $visit->visitors()->sync($request->visitors);
         if (isset($request->startVisit) && $request->startVisit == "start-visit") {
+            $visit->status = "Ongoing";
+            $visit->date = now();
             $visit->time = now();
+        }
+        if (isset($request->endVisit) && $request->endVisit == "end-visit") {
+            $visit->status = "Refused";
+        }
+        if (isset($request->finishVisit) && $request->finishVisit == "finish-visit") {
+            $visit->status = "Finished";
         }
         $data = array();
         foreach ($request->visitorIds as $visitorIndex => $visitorId) {
@@ -168,6 +164,7 @@ class VisitController extends Controller
     {
         $visit = Visit::findOrFail($request->visit_id);
         $visit->delete();
-        return back();
+        return back()->with('message','Visit is deleted successfully');
+
     }
 }

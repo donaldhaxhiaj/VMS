@@ -53,21 +53,12 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Do Takoj</label>
+                                        <label for="companies">Do Takoj</label>
                                         <select name="companies" id="companies" class="form-control">
                                             <option value=""> Select</option>
                                             @foreach ($companies as $company)
                                                 <option value="{{ $company->id }}">{{ $company->name }}</option>
                                             @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="plan">Visit Plan</label>
-                                        <select name="plan" id="plan" class="form-control">
-                                            <option value="selected disable">Visit Plan</option>
-                                            <option value="Planned">Planned</option>
-                                            <option value="Unplanned">Unplanned</option>
                                         </select>
                                     </div>
 
@@ -152,7 +143,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="dynamic-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <div class="modal fade" id="dynamic-modal" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -208,8 +199,7 @@
                                             <div class="col-lg-10" style="padding: 30px">
                                                 <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
                                                     <label for="name">Visitor Name<sup style="color: red">*</sup></label>
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name"
-                                                           value="{{ old('name') }}">
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
                                                     @if ($errors->has('name'))
                                                         <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -219,7 +209,7 @@
                                                 <div class="form-group {{ $errors->has('surname') ? ' has-error' : '' }}">
                                                     <label for="surname">Visitor Surname<sup style="color: red">*</sup></label>
                                                     <input type="text" class="form-control" id="surname" name="surname"
-                                                           placeholder="Surname" value="{{ old('surname') }}">
+                                                           placeholder="Surname">
                                                     @if ($errors->has('surname'))
                                                         <span class="help-block">
                                         <strong>{{ $errors->first('surname') }}</strong>
@@ -259,18 +249,18 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon">@</span>
                                                     <input type="email" class="form-control" id="email" name="email"
-                                                           placeholder="visitor@domain.com" value="{{ old('email') }}">
+                                                           placeholder="visitor@domain.com">
                                                 </div>
                                                 <br>
                                                 <div class="form-group">
                                                     <label for="phone">Phone</label>
                                                     <input type="text" class="form-control" id="phone" name="phone"
-                                                           placeholder="Phone Number" value="{{ old('phone') }}">
+                                                           placeholder="Phone Number">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="comments">Visitor Comments</label>
                                                     <input type="text" class="form-control" id="comments" name="comments"
-                                                           placeholder="Comments" value="{{ old('comments') }}">
+                                                           placeholder="Comments">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="commingfrom">Perfaqeson</label>
@@ -361,7 +351,12 @@
 
                 visitorId.val('').trigger('change.select2');
                 commingfrom.val('');
-                modal.modal('hide');
+                $("#mymodal").on("hidden.bs.modal", function(){
+                    $("dynamic-modal").html("");
+                });
+                //modal.modal('hide');
+
+
             }else{
                 alert("Eshte zgjedhur njehere ky vizitor")//duhet bere me popup
             }

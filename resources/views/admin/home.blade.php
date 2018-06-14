@@ -25,7 +25,9 @@
                 <div class="box-body">
                     <div class="small-box bg-green col-lg-4">
                         <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
+                            @foreach ($visitors as $visitor)
+                            <h3>{{ ($visitor->id)}}<sup style="font-size: 20px"></sup></h3>
+                            @endforeach
 
                             <p>New Visitors</p>
                         </div>
