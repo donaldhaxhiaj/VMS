@@ -26,8 +26,5 @@ class HomeController extends Controller
 
     }
 
-    public function showChangePasswordForm(){
-        return view('auth.changepassword');
-    }
 }
 

@@ -15,7 +15,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Edit Role</h3>
+                            <h3 class="box-title">Edito Kompanine</h3>
                         </div>
                     @include('includes.messages')
                     <!-- /.box-header -->
@@ -26,12 +26,12 @@
                             <div class="box-body">
                                 <div class="col-lg-offset-3 col-lg-6">
                                     <div class="form-group">
-                                        <label for="name">Company Name</label>
+                                        <label for="name">Emri kompanise</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Company Name" value="{{ $company->name }}">
                                     </div>
 
                                     <div class="form-group {{ $errors->has('ptm') ? ' has-error' : '' }}">
-                                        <label for="ptm">Person To Meet</label>
+                                        <label for="ptm">Personi qe do takoj</label>
                                         <input type="text" class="form-control" id="ptm" name="ptm" placeholder="Person To Meet" value="{{ $company->ptm }}">
                                         @if ($errors->has('ptm'))
                                             <span class="help-block">
@@ -45,8 +45,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <a href="{{ route('company.index') }}" class="btn btn-warning">Back</a>
+                                        <button type="submit" class="btn btn-primary">Ruaj</button>
+                                        <a href="{{ route('company.index') }}" class="btn btn-warning">Mbrapa</a>
                                     </div>
 
 

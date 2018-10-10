@@ -15,7 +15,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Permissions</h3>
+                            <h3 class="box-title">Te drejtat</h3>
                         </div>
                     @include('includes.messages')
                         <!-- /.box-header -->
@@ -25,14 +25,14 @@
                             <div class="box-body">
                                 <div class="col-lg-offset-3 col-lg-6">
                                     <div class="form-group">
-                                        <label for="name">Permission</label>
+                                        <label for="name">Emri</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Permission">
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="for">Permission for</label>
+                                        <label for="for">Per ke do te jete e drejta</label>
                                         <select name="for" id="for" class="form-control">
-                                            <option value="selected disable">Select Permission for</option>
+                                            <option value="selected disable">Zgjidh te drejten per ke</option>
                                             <option value="user">User</option>
                                             <option value="visitor">Visitor</option>
                                             <option value="companies">Visit</option>
@@ -41,8 +41,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <a href="{{ route('permission.index') }}" class="btn btn-warning">Back</a>
+                                        <button type="submit" class="btn btn-primary">Ruaj</button>
+                                        <a href="{{ route('permission.index') }}" class="btn btn-warning">Mbrapa</a>
                                     </div>
 
 

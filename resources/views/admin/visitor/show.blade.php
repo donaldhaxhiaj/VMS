@@ -3,10 +3,11 @@
 @section('headSection')
     <link rel="stylesheet" href="{{ asset('admin/plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('main-content')
+
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -21,13 +22,8 @@
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Visitors</h3>
-                        <a class='col-lg-offset-5 btn btn-success' href="{{ route('visitor.create') }}">Add New</a>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                            <i class="fa fa-minus"></i></button>
-
-                    </div>
+                    <h3 class="box-title">Vizitoret</h3>
+                        <a class='btn btn-success pull-right' href="{{ route('visitor.create') }}"><span class="glyphicon glyphicon-plus"></span> Regjistro</a>
                 </div>
                 <div class="box-body">
                     <div class="box">
@@ -37,55 +33,18 @@
 
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example2" class="table table-condensed">
                                 <thead>
                                 <tr>
-                                    <th>S.No</th>
-                                    <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>More Info</th>
-                                    @can('users.update',Auth::user())
-                                    <th>Edit</th>
-                                    @endcan
-                                    @can('users.delete',Auth::user())
-                                    <th>Delete</th>
-                                    @endcan
+                                    <th>Nr. Vizitorit</th>
+                                    <th>Emri Mbiemri</th>
+                                    <th>Veprime
+                                    </th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($visitors as $visitor)
-                                    <tr>
-                                        <td>{{ $loop->index + 1 }}</td>
-                                        <td>{{ $visitor->name }}</td>
-                                        <td>{{ $visitor->surname }}</td>
-                                        <td>
-                                            <a href="#" data-toggle="popover" title="Visitor Info" data-content="
-                                            <dl>
-                                            <dt>Gender:</dt><dd>{{ $visitor->gender }}</dd>
-                                            <dt>Idnumber:</dt><dd>{{ $visitor->idnr }}</dd>
-                                            <dt>Birthdate:</dt><dd>{{ $visitor->date }}</dd>
-                                            <dt>State:</dt><dd>{{ $visitor->state }}</dd>
-                                            <dt>Email:</dt><dd>{{ $visitor->email }}</dd>
-                                            <dt>Phone:</dt><dd>{{ $visitor->phone }}</dd>
-                                            <dt>Comments:</dt><dd>{{ $visitor->comments }}</dd>
-                                            </dl>
-                                            ">
-                                                <span class="glyphicon glyphicon-info-sign"></span></a>
-                                        </td>
-                                        @can('users.update',Auth::user())
-                                            <td><a href="{{ route('visitor.edit',$visitor->id) }}"><span class="glyphicon glyphicon-edit"></span></a></td>
-                                        @endcan
-                                        <td>
-                                            @can('users.delete',Auth::user())
-                                                <a href="" data-visitid={{$visitor->id}} data-toggle="modal" data-target="#delete"><span
-                                                            class="glyphicon glyphicon-trash"></span></a>
 
-                                        </td>
-                                            @endcan
-
-
-                                    </tr>
-                                @endforeach
                                 </tbody>
 
                             </table>
@@ -95,7 +54,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    Footer
+
                 </div>
                 <!-- /.box-footer-->
             </div>
@@ -106,31 +65,7 @@
     </div>
     <!-- /.content-wrapper -->
     <!-- Modal -->
-    <div class="modal modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
-                </div>
-                <form action="{{route('visitor.destroy','test')}}" method="post">
-                    {{method_field('delete')}}
-                    {{csrf_field()}}
-                    <div class="modal-body">
-                        <p class="text-center">
-                            Are you sure you want to delete this?
-                        </p>
-                        <input type="hidden" name="visit_id" id="visit_id" value="">
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal">No, Cancel</button>
-                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 
 @endsection
@@ -140,17 +75,120 @@
     <script src="{{ asset('admin/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script>
         $(function () {
-            $("#example1").DataTable();
-            $('[data-toggle="popover"]').popover({ html: true });
+            var HasEditRights = false;
+            @can('users.update',Auth::user())
+                HasEditRights = true;
+            @endcan
+            $('#example2').on( 'draw.dt', function () {
+
+                $('[data-toggle="popover"]').popover({ html: true, trigger: 'focus' });
+            });
+
+            $('#example2').DataTable({
+                "language": {
+                    "search": "Kerko:",
+                    "sLengthMenu": "Shfaq _MENU_ Rreshta",
+                    "info": "Duke shfaqur _START_ deri ne _END_ nga _TOTAL_ regjistrime",
+                    "infoEmpty": "Duke shfaqur 0 deri ne 0 nga 0 regjistrimet",
+                    "emptyTable":     "Nuk ka te dhena",
+                    "oPaginate": {
+                        "sNext": "Para",
+                        "sPrevious": "Mbrapa"
+                    }
+                },
+                "processing": true,
+                "serverSide": true,
+                "targets": 'no-sort',
+                "bSort": false,
+                "order": [],
+                "ajax":{
+                    "url": "{{ url('visitor/ajaxList') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data":{ _token: "{{csrf_token()}}"}
+                },
+
+                "columns": [
+                    { "data": "id", orderable:false},
+                    { "data": null,
+                        orderable:false,
+                        render: function (data, type, row) {
+                            var details = row.name + " " + row.surname;
+                            return details;
+                        }
+                    },
+
+                    { "data": "options",
+                        orderable:false,
+                        render: function(data, type,row){
+                            return "<a href=\"javascript://\" class='btn btn-sm btn-info' data-toggle='popover' data-placement='left' title='Info per vizitorin' data-content='" +
+                                "                                            <dl>" +
+                                "                                            <dt>Gjinia:</dt><dd>"+row.gender+"</dd>" +
+                                "                                            <dt>Nr.identiteti:</dt><dd>"+row.idnr +"</dd>" +
+                                "                                            <dt>Datelindja:</dt><dd>"+row.date +"</dd>" +
+                                "                                            <dt>Shtetesia:</dt><dd>"+row.state +"</dd>" +
+                                "                                            <dt>Email:</dt><dd>"+row.email +"</dd>" +
+                                "                                            <dt>Cel:</dt><dd>"+row.phone +"</dd>" +
+                                "                                            <dt>Komente:</dt><dd>"+row.comments +"</dd>" +
+                                "                                            <dt>Statusi:</dt><dd>"+row.status +"</dd>" +
+                                "                                            <dt>Ndodhet ne Vizite?:</dt><dd>"+row.actual_visit +"</dd>" +
+                                "                                                    </dl>" +
+                                "'>" +
+                                "                                                <span class='glyphicon glyphicon-info-sign'></span></a>"+
+                                (HasEditRights===true?"&nbsp;<a href='./visitor/"+row.id+"/edit' title='Modifiko' class='btn btn-sm btn-warning'><span class='glyphicon glyphicon-edit'></span></a>":"")+
+                                "&nbsp;"+(row.status==='Inaktiv'?"<button onclick='changeStatus(this);' data-status='"+row.status+"' data-visitor-id='"+row.id+"' class='btn btn-sm btn-success'> <i class='fa fa-eye'></i></button>"
+                                    :"<button onclick='changeStatus(this);' data-status='"+row.status+"' data-visitor-id='"+row.id+"' class='btn btn-sm btn-danger'> <i class='fa fa-eye-slash'></i></button>");
+
+                        }
+                    }],
+                createdRow: function (row, data) {
+                    if (data['status'] == "Inaktiv") {
+                        $(row).addClass('danger');
+                    }
+                }
+
+            });
+
+
         });
+
+        function changeStatus(button) {
+            var status =$(button).data("status"),
+                id = $(button).data("visitor-id"),
+                tr = $(button).closest("tr");
+            $.ajax({
+                type: 'POST',
+                url: "../visitor/ChangeStatus",
+                data: {id: id},
+                dataType: 'JSON',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data) {
+                    if(data.success) {
+                        $(button).find('i').remove();
+                        if (status === 'Inaktiv') {
+                            $(button).removeClass("btn-info").addClass("btn-danger").html($('<i/>', {class: 'fa fa-eye-slash'}));//.append(' Caktivizo');
+                            $(tr).removeClass("danger");
+                        }
+                        else {
+                            $(button).removeClass("btn-danger").addClass("btn-success").html($('<i/>', {class: 'fa fa-eye'}));//.append(' Aktivizo');
+                            $(tr).addClass("danger");
+                        }
+                        $(button).data("status", status === 'Aktiv' ? 'Inaktiv' : 'Aktiv');
+                    }else{
+                        alert("GABIM");
+                    }
+                },
+                error: function (err) {
+                    alert("GABIM")
+                }
+            });
+
+
+        }
     </script>
-    <script>
-        $('#delete').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var visit_id = button.data('visitid')
-            var modal = $(this)
-            modal.find('.modal-body #visit_id').val(visit_id);
-        })
-    </script>
+
+
 
 @endsection

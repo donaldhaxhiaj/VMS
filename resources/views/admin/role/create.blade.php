@@ -77,10 +77,9 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <a href="{{ route('role.index') }}" class="btn btn-warning">Back</a>
+                                        <button type="submit" class="btn btn-primary">Ruaj</button>
+                                        <a href="{{ route('role.index') }}" class="btn btn-warning">Mbrapa</a>
                                     </div>
-
                                 </div>
                         </form>
                     </div>

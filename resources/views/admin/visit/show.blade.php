@@ -21,85 +21,48 @@
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Visits</h3>
-                    <a class='col-lg-offset-5 btn btn-success' href="{{ route('visit.create') }}">Add New</a>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-                                title="Collapse">
-                            <i class="fa fa-minus"></i></button>
-
-                    </div>
+                    <h3 class="box-title">Vizitat</h3>
+                    <a class='col-lg-offset-5 btn btn-success pull-right' href="{{ route('visit.create') }}"><span class="glyphicon glyphicon-plus"></span> Regjistro</a>
                 </div>
                 <div class="box-body">
                     <div class="box">
                         <div class="box-header">
                             @include('includes.messages')
                         </div>
+
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped" data-toggle="dataTable"
-                                   data-form="deleteForm">
+                        <div class="form-inline">
+                            <div class="form-group ">
+                                <label for="FilterStatus">Statusi</label>
+                                <select name="FilterStatus" id="FilterStatus" class="form-control">
+                                    <option value="">---Zgjidh---</option>
+                                    <option value="Aktive">Aktive</option>
+                                    <option value="Perfunduar">Perfunduar</option>
+                                    <option value="Ne pritje">Ne pritje</option>
+                                    <option value="Refuzuar">Refuzuar</option>
+                                </select>
+                            </div>
+                        </div>
+                            <br>
+                            <table id="dtVisits" class="table table-condensed">
                                 <thead>
                                 <tr>
-                                    <th>S.No</th>
-                                    <th>Visit Purpose</th>
+                                    <th>Id.nr</th>
+                                    <th>Qellimi</th>
                                     {{--<th>Will Meet</th>--}}
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>End Time</th>
-                                    <th>Vizitoret</th>
-                                    @can('visits.update',Auth::user())
-                                        <th>Edit</th>
-                                    @endcan
-                                    @can('visits.delete',Auth::user())
-                                        <th>Delete</th>
-                                    @endcan
+                                    <th>Statusi</th>
+                                    <th>Data</th>
+                                    <th>Koha fillimit</th>
+                                    <th>Koha mbarimit</th>
+                                    <th>Me shume info
                                 </tr>
                                 </thead>
-                                <tbody>
                                 @foreach ($visits as $visit)
-                                    <tr>
-                                        <td>{{ $loop->index + 1 }}</td>
-                                        @if($visit->purposetext)
-                                            <td>
-                                                {{ $visit->purposetext }}
-                                            </td>
-                                            @else
-                                            <td>
-                                                {{ $visit->purpose }}
-                                            </td>
-                                        @endif
-                                       {{-- <td> @foreach ($visit->companies as $company)
-                                                {{ $company->name }}
-                                            @endforeach
-                                        </td>--}}
-                                        <td>{{ $visit->status}}</td>
-                                        <td>{{ $visit->date}}</td>
-                                        <td>{{ $visit->time}}</td>
-                                        <td>{{ $visit->endtime}}</td>
-                                        <td>
-                                            <a href="#" data-toggle="popover" data-placement="left" title="Visitor Info" data-content="
-                                            <dl>
-                                            @foreach ($visit->visitors as $visitor)
-                                                    <dt></dt><dd>{{ $visitor->name }}</dd>
-                                            @endforeach</dl>">
+                                <tbody>
 
-                                                <span class="glyphicon glyphicon-info-sign"></span></a>
-                                        </td>
-                                        @can('visits.update',Auth::user())
-                                            <td><a href="{{ route('visit.edit',$visit->id) }}"><span
-                                                            class="glyphicon glyphicon-edit"></span></a></td>
-                                        @endcan
-                                        @can('visits.delete',Auth::user())
-                                            <td>
-                                                <a href="" data-visitid={{$visit->id}} data-toggle="modal" data-target="#delete"><span
-                                                            class="glyphicon glyphicon-trash"></span></a>
-                                            </td>
-                                        @endcan
-                                    </tr>
-                                @endforeach
                                 </tbody>
+                                @endforeach
 
                             </table>
                         </div>
@@ -107,9 +70,7 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
-                    Footer
-                </div>
+
                 <!-- /.box-footer-->
             </div>
             <!-- /.box -->
@@ -119,28 +80,50 @@
     </div>
     <!-- /.content-wrapper -->
     <!-- Modal -->
-    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <!--Visit Modal-->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
+                    <h5 class="modal-title" id="exampleModalLabel">Vizita</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <form action="{{route('visit.destroy','test')}}" method="post">
-                    {{method_field('delete')}}
-                    {{csrf_field()}}
+                <form role="form" action="{{ route('visit.EndVisit') }}" method="post">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="visit_id" id="visit_id" value="" />
                     <div class="modal-body">
-                        <p class="text-center">
-                            Are you sure you want to delete this?
-                        </p>
-                        <input type="hidden" name="visit_id" id="visit_id" value="">
-
+                        <h3>Jeni te sigurt qe doni te perfundoni viziten?</h3>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info" data-dismiss="modal">No, Cancel</button>
-                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        <button class="btn btn-success" name="finishVisit" id="end" value="finish-visit">Konfirmo</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Anullo</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Info Modal-->
+    <div class="modal fade" id="visitors" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Info per vizitoret</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <dl>
+                        @foreach ($visit->visitors as $visitor)
+                            <dt></dt><dd>{{ $visitor->name }} {{ $visitor->surname }}</dd>
+                        @endforeach</dl>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Mbylle</button>
+                </div>
             </div>
         </div>
     </div>
@@ -154,26 +137,88 @@
     <script src="{{ asset('admin/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script>
         $(function () {
-            $("#example1").DataTable();
-        });
-    </script>
-    <script>
-        $(function () {
-            $("#example1").DataTable();
-            $('[data-toggle="popover"]').popover({ html: true });
+            var HasEditRights = false;
+            @can('users.update',Auth::user())
+                HasEditRights = true;
+            @endcan
+                var visitsTable = $('#dtVisits').DataTable({
+                "language": {
+                    "search": "Kerko:",
+                    "sLengthMenu": "Shfaq _MENU_ Rreshta",
+                    "info": "Duke shfaqur _START_ deri ne _END_ nga _TOTAL_ regjistrime",
+                    "infoEmpty": "Duke shfaqur 0 deri ne 0 nga 0 regjistrimet",
+                    "emptyTable":     "Nuk ka te dhena",
+                    "infoFiltered": "(filtruar nga _MAX_ rregjistrime totale)",
+                    "oPaginate": {
+                        "sNext": "Para",
+                        "sPrevious": "Mbrapa"
+                    }
+                },
+                "processing": true,
+                "serverSide": true,
+                "targets": 'no-sort',
+                "bSort": false,
+                "order": [[0, "desc" ]],
+                "ajax":{
+                    "url": "{{ url('visit/ajaxList') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data":{ _token: "{{csrf_token()}}"}
+                },
+                "columns": [
+                    { "data": "id"},
+                    { "data": null,
+                        orderable:false,
+                        render: function (data, type, row) {
+                            return row.purpose === 'Other'?row.purposetext:row.purpose;
+                        }
+                    },
+                    { "data": "status"},
+                    { "data": "date"},
+                    { "data": "time"},
+                    { "data": "endtime"},
+
+                    { "data": "options",
+                        orderable: false,
+                        render: function(data, type,row){
+                            return "<a href='#' data-toggle='modal' class=\"btn btn-sm btn-info\" data-target=\"#visitors\"  title='Vizitoret ne vizite' data-content='" + "'><span class='glyphicon glyphicon-info-sign'></span></a>"+
+                                    (HasEditRights===true?"&nbsp;<a href='./visit/"+row.id+"/edit' title='Me shume info' class='btn btn-sm btn-warning'><span class='glyphicon glyphicon-edit'></span></a>":"")+"&nbsp;"+(row.status !== 'Aktive'?"":"<a href='#' data-toggle='modal' class=\"btn btn-sm btn-danger\" data-target=\"#exampleModal1\" data-visitId='" +row.id+ "'><span data-toggle=\"tooltip\" title=\"Perfundo Viziten\"\n" +
+                                    "class=\"fa fa-hourglass-end\"></span></a>")
+
+
+                        }
+                    }],
+                "createdRow": function( row, data, dataIndex) {
+                    if (data['status'] == "Aktive") {
+                        $(row).addClass('warning');
+                    }
+                    else if (data['status'] == "Perfunduar") {
+                        $(row).addClass('success');
+                    }
+                    else if (data['status'] == "Refuzuar") {
+                        $(row).addClass('danger');
+                    }
+                },
+            });
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#exampleModal1').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) ;
+                var visitId = button.data('visitid') ;
+                var modal = $(this);
+                modal.find('#visit_id').val(visitId);
+            });
+
+            $('#FilterStatus'). on('change', function() {
+                var val = $(this).val();
+                visitsTable.columns(2).search(val).draw();
+            });
+
 
         });
-    </script>
 
-    <script>
-        $('#delete').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var visit_id = button.data('visitid')
-            var modal = $(this)
-            modal.find('.modal-body #visit_id').val(visit_id);
-        })
     </script>
-
 
 
 @endsection

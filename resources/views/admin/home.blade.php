@@ -16,37 +16,31 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">VMS</h3>
 
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                            <i class="fa fa-minus"></i></button>
-
-                    </div>
                 </div>
                 <div class="box-body">
-                    <div class="small-box bg-green col-lg-4">
-                        <div class="inner">
-                            @foreach ($visitors as $visitor)
-                            <h3>{{ ($visitor->id)}}<sup style="font-size: 20px"></sup></h3>
-                            @endforeach
-
-                            <p>New Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="{{ route('visitor.index') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    <div style="background-image: url('/user/img/home-bg.jpg'); background-repeat: no-repeat;background-size: cover;" class="jumbotron text-center">
+                        <h1>Miresevini ne VMS <br> {{ Auth::user()->name }}</h1>
+                        <p>Veprime te shpejta</p>
+                        <p>
+                            <a class="btn btn-lg btn-outline" href="{{ route('visitor.create') }}" role="button">Rregjistro vizitorin</a>
+                            <a class="btn btn-lg btn-outline" href="{{ route('visit.create') }}" role="button">Rregjistro viziten</a>
+                        </p>
                     </div>
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
-
-                </div>
-                <!-- /.box-footer-->
             </div>
             <!-- /.box -->
 
         </section>
         <!-- /.content -->
     </div>
+
+    <style>
+        .btn-outline {
+            background-color: transparent;
+            color: inherit;
+            transition: all .5s;
+        }
+    </style>
     <!-- /.content-wrapper -->
 @endsection

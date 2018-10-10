@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\admin\admin;
 use App\Model\admin\role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -71,6 +72,8 @@ class UserController extends Controller
         //
     }
 
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -113,8 +116,29 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        $user = User::findOrFail($request->visit_id);
+        $user = Admin::findOrFail($request->visit_id);
         $user->delete();
         return back()->with('message','User is deleted successfully');
     }
+
+    public function password()
+    {
+        return view('admin.user.updatepassword');
+    }
+
+    public function changePassword()
+    {
+        $this->validate(request(), [
+            'current_password' => 'required|current_password',
+            'new_password' => 'required|string|min:6|confirmed',
+        ]);
+
+        request()->user()->fill([
+            'password' => Hash::make(request()->input('new_password'))
+        ])->save();
+        request()->session()->flash('success', 'Password changed!');
+
+        return redirect()->route('admin.home');
+    }
+
 }

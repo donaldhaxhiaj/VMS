@@ -33,7 +33,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('users.role', 'App\Policies\UserPolicy@role');
         Gate::define('users.permission', 'App\Policies\UserPolicy@permission');
         Gate::define('users.company', 'App\Policies\UserPolicy@company');
+        Gate::define('users.purpose', 'App\Policies\UserPolicy@purpose');
         Gate::define('visits.visit', 'App\Policies\VisitPolicy@visit');
+        Gate::define('users.view', 'App\Policies\UserPolicy@view');
 
     }
 }

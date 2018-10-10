@@ -17,4 +17,5 @@ class visit extends Model
         return $this->hasOne('App\Model\user\company','id','company_id');
     }
 
+
 }

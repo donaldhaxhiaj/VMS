@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Model\user\visitor;
+use App\Model\user\visit;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +28,11 @@ class VisitorController extends Controller
      */
     public function index()
     {
-        $visitors = visitor::all();
-        return view('admin.visitor.show',compact('visitors'));
+        $visitors = visitor::withCount(["visits"=>function($query){
+                        $query->where("checked_out",0);
+                    }])->get();
+        $visits = visit::all();
+        return view('admin.visitor.show',compact('visitors','visits'));
     }
 
     /**
@@ -38,10 +42,11 @@ class VisitorController extends Controller
      */
     public function create()
     {
+        $visits = visit::all();
         if (Auth::user()->can('visitors.create')) {
             return view('admin.visitor.visitor');
         }
-        return redirect(route('admin.home'));
+        return redirect(route('admin.home'),compact('visits'));
     }
 
     /**
@@ -68,9 +73,11 @@ class VisitorController extends Controller
         $visitor->email = $request->email;
         $visitor->phone = $request->phone;
         $visitor->comments = $request->comments;
+        $visitor->status = $request->status;
         $visitor->save();
         return redirect(route('visitor.index'))->with('message','Visitor Created Successfully');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -96,6 +103,8 @@ class VisitorController extends Controller
         $visitor->email = $request->email;
         $visitor->phone = $request->phone;
         $visitor->comments = $request->comments;
+
+
         $visitor->save();
 
         $response = Response::create($visitor, 200);
@@ -103,6 +112,76 @@ class VisitorController extends Controller
         $response->header('Content-Type', 'application/json');
 
         return $response;
+    }
+
+    public function ChangeStatus(Request $request)
+    {
+        $visitor = Visitor::findOrFail($request->id);
+        $visitor->update(['status' => $visitor->status == 1? 0:1]);
+
+        return response()->json(array('success' => true));
+    }
+
+    public function ajaxList(Request $request)
+    {
+        $totalData = Visitor::count();
+
+        $totalFiltered = $totalData;
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+
+
+        $search = $request->input('search.value');
+
+        $visitors =  Visitor::withCount(["visits"=>function($query){
+            $query->where("checked_out",0);
+        }])
+            ->where('name','like',"%{$search}%")
+            ->orWhere('surname','like',"%{$search}%")
+            ->offset($start)
+            ->limit($limit)
+            ->orderBy("name")
+            ->orderBy("surname")
+            ->get();
+
+        $totalFiltered = Visitor::where('name','like',"%{$search}%")
+            ->orWhere('surname','like',"%{$search}%")
+            ->count();
+
+
+        $data = array();
+        if(!empty($visitors))
+        {
+            foreach ($visitors as $visitor)
+            {
+                $nestedData['id'] = $visitor->id;
+                $nestedData['name'] = $visitor->name;
+                $nestedData['surname'] = $visitor->surname;
+                $nestedData['gender'] = $visitor->gender;
+                $nestedData['idnr'] = $visitor->idnr;
+                $nestedData['date'] = $visitor->date;
+                $nestedData['state'] = $visitor->state;
+                $nestedData['email'] = $visitor->email;
+                $nestedData['phone'] = $visitor->phone;
+                $nestedData['comments'] = $visitor->comments;
+                $nestedData['status'] = $visitor->status?'Aktiv':'Inaktiv';
+                $nestedData['actual_visit'] = $visitor->visits_count==0?'Jo':'Po';
+
+                $data[] = $nestedData;
+
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data
+        );
+
+        echo json_encode($json_data);
+
     }
 
     /**
@@ -113,7 +192,7 @@ class VisitorController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -124,10 +203,11 @@ class VisitorController extends Controller
      */
     public function edit($id)
     {
+        $visits = visit::all();
         if (Auth::user()->can('visitors.update')) {
             $visitor = visitor::where('id', $id)->first();
 
-            return view('admin.visitor.edit',compact('visitor'));
+            return view('admin.visitor.edit',compact('visitor','visits'));
 ;
         }
         return redirect(route('admin.home'));
@@ -143,22 +223,17 @@ class VisitorController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'name'=>'required',
-            'surname'=>'required',
-            'idnr'=>'required'
+
         ]);
 
         $visitor = visitor::find($id);
-        $visitor->name = $request->name;
         $visitor->surname = $request->surname;
-        $visitor->idnr = $request->idnr;
-        $visitor->date = $request->date;
-        $visitor->state = $request->state;
-        $visitor->gender = $request->gender;
         $visitor->email = $request->email;
         $visitor->phone = $request->phone;
-        $visitor->comments = $request->comments;
+        $visitor->comments = $visitor->comments."\n".$request->comments;
+        $visitor->status = $request->status;
         $visitor->save();
+
 
         return redirect(route('visitor.index'))->with('message','Visitor Updated Successfully');
     }

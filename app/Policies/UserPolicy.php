@@ -18,7 +18,7 @@ class UserPolicy
      */
     public function view(admin $user)
     {
-        //
+        return $this->getPermission($user,21);
     }
 
     /**
@@ -67,6 +67,10 @@ class UserPolicy
     public function company(admin $user)
     {
         return $this->getPermission($user,16);
+    }
+    public function purpose(admin $user)
+    {
+        return $this->getPermission($user,20);
     }
 
     protected function getPermission($user,$p_id)

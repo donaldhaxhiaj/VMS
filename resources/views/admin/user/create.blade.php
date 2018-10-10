@@ -16,7 +16,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Add Admin</h3>
+                            <h3 class="box-title">Perdoruesit</h3>
                         </div>
                     @include('includes.messages')
                     <!-- /.box-header -->
@@ -26,7 +26,7 @@
                             <div class="box-body">
                                 <div class="col-lg-offset-3 col-lg-6">
                                     <div class="form-group">
-                                        <label for="name">User Name</label>
+                                        <label for="name">Emri</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="User Name" value="{{ old('name') }}">
                                     </div>
                                     <div class="form-group">
@@ -34,20 +34,20 @@
                                         <input type="text" class="form-control" id="email" name="email" placeholder="email" value="{{ old('email') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="phone">Phone</label>
+                                        <label for="phone">Cel</label>
                                         <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" value="{{ old('phone') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="password">Password</label>
+                                        <label for="password">Paswordi</label>
                                         <input type="password" class="form-control" id="password" name="password" placeholder="password">
                                     </div>
                                     <div class="form-group">
-                                        <label for="password_confirmation">Confirm Password</label>
+                                        <label for="password_confirmation">Konfirmo Paswordin</label>
                                         <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="confirm password">
                                     </div>
 
                                     <div class="form-group">
-                                      <label for="confirm_passowrd">Status</label>
+                                      <label for="confirm_passowrd">Statusi</label>
                                       <div class="checkbox">
                                         <label ><input type="checkbox" name="status" @if (old('status') == 1)
                                           checked
@@ -58,7 +58,7 @@
                                     
 
                                     <div class="form-group">
-                                        <label>Assign Role</label>
+                                        <label>Zgjidh Rolin</label>
                                         <div class="row">
                                             @foreach ($roles as $role)
                                                 <div class="col-lg-3">
@@ -70,8 +70,8 @@
                                         </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <a href="{{ route('user.index') }}" class="btn btn-warning">Back</a>
+                                        <button type="submit" class="btn btn-primary">Ruaj</button>
+                                        <a href="{{ route('user.index') }}" class="btn btn-warning">Mbrapa</a>
                                     </div>
 
 

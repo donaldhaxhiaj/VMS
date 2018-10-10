@@ -12,4 +12,9 @@ class visitor extends Model
         return $this->belongsToMany('App\Model\user\visit','visit_visitors');
     }
 
+    protected $fillable = [
+        'name', 'surname','email','phone','status'
+    ];
+
+
 }

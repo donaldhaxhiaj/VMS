@@ -20,16 +20,10 @@
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Users</h3>
+                    <h3 class="box-title">Perdoruesit</h3>
                     @can('users.create', Auth::user())
-                    <a class='col-lg-offset-5 btn btn-success' href="{{ route('user.create') }}">Add New</a>
+                    <a class='col-lg-offset-5 btn btn-success pull-right' href="{{ route('user.create') }}">Krijo</a>
                     @endcan
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                            <i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-                            <i class="fa fa-times"></i></button>
-                    </div>
                 </div>
                 <div class="box-body">
                     <div class="box">
@@ -38,18 +32,18 @@
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-condensed">
                                 <thead>
                                 <tr>
-                                    <th>S.No</th>
-                                    <th>User Name</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
+                                    <th>Id.nr</th>
+                                    <th>Emri perdoruesit</th>
+                                    <th>Roli</th>
+                                    <th>Statusi</th>
                                     @can('users.update',Auth::user())
-                                    <th>Edit</th>
+                                    <th>Edito</th>
                                     @endcan
                                     @can('users.delete',Auth::user())
-                                    <th>Delete</th>
+                                    <th>Fshi</th>
                                     @endcan
                                 </tr>
                                 </thead>
@@ -63,42 +57,27 @@
                                                 {{ $role->name }},
                                             @endforeach
                                         </td>
-                                        <td>{{ $user->status? 'Active' : 'Inactive' }}</td>
+                                        <td>{{ $user->status? 'Aktiv' : 'Inaktiv' }}</td>
                                         @can('users.update',Auth::user())
-                                        <td><a href="{{ route('user.edit',$user->id) }}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                                        <td><a href="{{ route('user.edit',$user->id) }}" class="btn btn-sm btn-warning"><span
+                                                        class="glyphicon glyphicon-edit"></span></a></td>
                                         @endcan
                                         <td>
                                             @can('users.delete',Auth::user())
-                                                <a href="" data-visitid={{$user->id}} data-toggle="modal" data-target="#delete"><span
+                                                <a href="" data-visitid={{$user->id}} data-toggle="modal" data-target="#delete" class="btn btn-sm btn-danger"><span
                                                             class="glyphicon glyphicon-trash"></span></a>
                                         </td>
                                         @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>S.No</th>
-                                    <th>User Name</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    @can('users.update',Auth::user())
-                                        <th>Edit</th>
-                                    @endcan
-                                    @can('users.delete',Auth::user())
-                                        <th>Delete</th>
-                                    @endcan
-                                </tr>
-                                </tfoot>
                             </table>
                         </div>
                         <!-- /.box-body -->
                     </div>
                 </div>
                 <!-- /.box-body -->
-                <div class="box-footer">
-                    Footer
-                </div>
+
                 <!-- /.box-footer-->
             </div>
             <!-- /.box -->
@@ -112,21 +91,21 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title text-center" id="myModalLabel">Delete Confirmation</h4>
+                    <h4 class="modal-title text-center" id="myModalLabel">Konfirmim</h4>
                 </div>
                 <form action="{{route('user.destroy','test')}}" method="post">
                     {{method_field('delete')}}
                     {{csrf_field()}}
                     <div class="modal-body">
                         <p class="text-center">
-                            Are you sure you want to delete this?
+                            Jeni te sigurt qe doni te hiqni userin?
                         </p>
                         <input type="hidden" name="visit_id" id="visit_id" value="">
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info" data-dismiss="modal">No, Cancel</button>
-                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Anullo</button>
+                        <button type="submit" class="btn btn-danger">Konfirmo</button>
                     </div>
                 </form>
             </div>
@@ -142,7 +121,20 @@
     <script src="{{ asset('admin/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script>
         $(function () {
-            $("#example1").DataTable();
+            $("#example1").DataTable({
+
+
+                    "language": {
+                        "search": "Kerko:",
+                        "sLengthMenu": "Shfaq _MENU_ Rreshta",
+                        "info": "Duke shfaqur _START_ deri ne _END_ nga _TOTAL_ regjistrime",
+                        "oPaginate": {
+                            "sNext": "Para",
+                            "sPrevious": "Mbrapa"
+                        }
+                    }
+                }
+            );
         });
     </script>
     <script>

@@ -15,7 +15,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Companies</h3>
+                            <h3 class="box-title">Kompanite</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
@@ -24,7 +24,7 @@
                             <div class="box-body">
                                 <div class="col-lg-offset-3 col-lg-6">
                                     <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
-                                        <label for="name">Company Name</label>
+                                        <label for="name">Emri kompanise</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Company Name">
                                         @if ($errors->has('name'))
                                             <span class="help-block">
@@ -33,7 +33,7 @@
                                         @endif
                                     </div>
                                     <div class="form-group {{ $errors->has('ptm') ? ' has-error' : '' }}">
-                                        <label for="ptm">Person To Meet</label>
+                                        <label for="ptm">Personi qe do takoj</label>
                                         <input type="text" class="form-control" id="ptm" name="ptm" placeholder="Person To Meet">
                                         @if ($errors->has('ptm'))
                                             <span class="help-block">
@@ -46,8 +46,8 @@
                                         <input type="number" class="form-control" id="cel" name="cel">
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <a href="{{ route('company.index') }}" class="btn btn-warning">Back</a>
+                                        <button type="submit" class="btn btn-primary">Ruaj</button>
+                                        <a href="{{ route('company.index') }}" class="btn btn-warning">Mbrapa</a>
                                     </div>
 
                                 </div>

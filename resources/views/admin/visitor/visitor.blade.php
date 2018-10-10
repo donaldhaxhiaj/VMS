@@ -22,17 +22,20 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Visitors</h3>
+                            <h3 class="box-title">Vizitoret</h3>
+                            <button type="button" id="read-manual-btn" data-loading-text="Duke skanuar..." class="btn btn-info pull-right"><i class="fa fa-id-card" aria-hidden="true"></i>
+                                Lexo nga Skaner</button>
                         </div>
+
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" action="{{ route('visitor.store') }}" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{ route('visitor.store') }}" method="post" id="visitor_form">
                             {{ csrf_field() }}
                             <div class="box-body">
                                 <div class="col-lg-6">
                                 <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <label for="name">Visitor Name<sup style="color: red">*</sup></label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ old('name') }}">
+                                    <label for="name">Emri<sup style="color: red">*</sup></label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Emri" value="{{ old('name') }}">
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -40,7 +43,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group {{ $errors->has('surname') ? ' has-error' : '' }}">
-                                    <label for="surname">Visitor Surname<sup style="color: red">*</sup></label>
+                                    <label for="surname">Mbiemri<sup style="color: red">*</sup></label>
                                     <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname" value="{{ old('surname') }}">
                                     @if ($errors->has('surname'))
                                         <span class="help-block">
@@ -48,34 +51,27 @@
                                     </span>
                                     @endif
                                 </div>
-                                <label for="idnr">Visitor ID.nr<sup style="color: red">*</sup></label>
-                                <div class="input-group input-group-sm {{ $errors->has('idnr') ? ' has-error' : '' }}">
-                                    <input type="text" class="form-control" id="idnr" name="idnr" placeholder="Id.nr" value="{{ old('idnr') }}">
+                                    <div class="form-group {{ $errors->has('idnr') ? ' has-error' : '' }}">
+                                        <label for="idnr">Nr.id e vizitorit<sup style="color: red">*</sup></label>
+                                        <input type="text" class="form-control" id="idnr" name="idnr" placeholder="Numri i kartes identitetit" value="{{ old('idnr') }}">
                                         @if ($errors->has('idnr'))
                                             <span class="help-block">
-                                                <strong>{{ $errors->first('idnr') }}</strong>
-                                            </span>
-                                        @endif
-                                    <span class="input-group-btn">
-                                      <button type="button" id="read-manual-btn" class="btn btn-info btn-flat">Start Scanning</button>
+                                        <strong>{{ $errors->first('idnr') }}</strong>
                                     </span>
-                                </div>
-                                <br>
-                                <div class="form-group"> <!-- Date input -->
-                                    <label class="control-label" for="date">Birth Date</label>
-                                    <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
-                                </div>
+                                        @endif
+                                    </div>
+
                                 <div class="form-group">
-                                      <label for="gender">Gender</label>
+                                      <label for="gender">Gjinia</label>
                                       <select name="gender" id="gender" class="form-control">
-                                            <option value="Not Specified">Gender</option>
+                                            <option value="None">-- Zgjidhni gjinine --</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
+                                            <option value="Other">Tjeter</option>
                                       </select>
                                 </div>
                                 <div class="form-group">
-                                      <label for="state">State</label>
+                                      <label for="state">Shtetesia</label>
                                       <input type="text" class="form-control" id="state" name="state" placeholder="State" value="{{ old('state') }}">
                                 </div>
                                 <label for="email">Email</label>
@@ -85,26 +81,35 @@
                                 </div>
                                 <br>
                                 <div class="form-group">
-                                      <label for="phone">Phone</label>
+                                      <label for="phone">Cel</label>
                                       <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" value="{{ old('phone') }}">
                                 </div>
+
                                 <div class="form-group">
-                                      <label for="comments">Visitor Comments</label>
-                                      <input type="text" class="form-control" id="comments" name="comments" placeholder="Comments" value="{{ old('comments') }}">
+                                      <label for="comments">Komente</label>
+                                    <textarea name="comments" id="comments" class="xlarge form-control"
+                                              style="margin: 0px 332.656px 0px 0px;"></textarea>
                                 </div>
+
+                                    <div class="form-group hidden">
+                                        <label for="confirm_passowrd">Status</label>
+                                        <div class="checkbox">
+                                            <label ><input type="checkbox" name="status" @if (old('status') == 0)
+                                                checked
+                                                           @endif value="1">Status</label>
+                                        </div>
+                                    </div>
 
                             </div>
                             </div>
                             <br>
-
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="{{ route('visitor.index') }}" class="btn btn-warning">Back</a>
+                                <button type="submit" class="btn btn-primary">Ruaj</button>
+                                <a href="{{ route('visitor.index') }}" class="btn btn-warning">Mbrapa</a>
                             </div>
                         </form>
                     </div>
                     <!-- /.box -->
-
                 </div>
                 <!-- /.col-->
             </div>
@@ -119,6 +124,7 @@
 
 @section('footerSection')
     <script src="{{ asset('admin/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/CPScanID/src/jquery.cpscanid.js') }}"></script>
     <script>
         $(document).ready(function(){
             var date_input=$('input[name="date"]'); //our date input has the name "date"
@@ -129,18 +135,19 @@
                 todayHighlight: true,
                 autoclose: true,
             })
-        })
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(".select2").select2();
         });
-    </script>
 
-    <script src="{{ asset('admin/plugins/CPScanID/src/jquery.cpscanid.js') }}"></script>
+        $(function(){
+            $("input[name=name]")[0].oninvalid = function () {
+                this.setCustomValidity("Kerkohet emri.");
+                this.setCustomValidity("");
+            };
+        });
 
-    <script>
-        $(document).ready(function () {
+
+            $(".select2").select2();
+
+
             try{
                 $.CPScanID.init({
                     callbackReadSuccess: function (data) {
@@ -158,6 +165,14 @@
                             $('#idnr').val(data[10161].Value);
                         }
 
+                        if(data[10120].Value){
+                            $('#gender').val(data[10120].Value == "M"? "Male":data[10120].Value == "F"?"Female":"None")
+                        }
+
+                        if(data[10132].Value){
+                            $('#state').val(Nationalities[data[10132].Value]?Nationalities[data[10132].Value]:data[10132].Value);
+                        }
+
                         if (data[10113].Value) {
                             var datestr = data[10113].Value;
                         }
@@ -172,11 +187,11 @@
                     },
                     callbackReadFail: function (data) {
                         console.log("Fail: ", data);
-                        alert("There is an error");
+                        alert("Ka ndodhur nje gabim");
 
                     },
                     callbackDisconnect: function () {
-                        console.log("Disconnected");
+                        console.log("Skaneri u shkeput");
                     }
                 });
             } catch(err){
@@ -188,15 +203,23 @@
             }
 
             $("#read-manual-btn").on("click", function () {
+                var btn = $(this);
+                btn.button('loading');
+                setTimeout(function () {
+                    btn.button('reset');
+                }, 2000);
                 try{
+                    $('#visitor_form')[0].reset();
+
                     $.CPScanID.read();
                 } catch(err){
                     if(err=="NOT_INITIATED"){
                         alert("Libraria nuk eshte inicializuar ende");
                     }
                 }
-            });
-
         })
+
+
+
     </script>
 @endsection
